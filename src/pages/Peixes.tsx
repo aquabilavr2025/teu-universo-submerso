@@ -1,34 +1,14 @@
 import Layout from "@/components/layout/Layout";
 import PageHero from "@/components/ui/PageHero";
 import ProductCard from "@/components/ui/ProductCard";
-
-// Fish inventory data - easily expandable by adding new rows
-// Format: { image: "URL", name: "Fish Name", quantity: number, price: "X,XX€" }
-const fishInventory = [
-  {
-    image: "https://drive.google.com/thumbnail?id=1XnPCLqgPYPQmZJIlasXAM87kaU2_xgBP&sz=w800",
-    name: "Tetra Neon",
-    quantity: 50,
-    price: "1,10€",
-    category: "Cardume",
-    description: "Peixe vibrante ideal para aquários comunitários"
-  },
-  // Add more fish entries below following this format:
-  // { image: "https://drive.google.com/thumbnail?id=FILE_ID&sz=w800", name: "Nome", quantity: X, price: "X,XX€", category: "Categoria", description: "Descrição" },
-];
-
-// Helper function to convert Google Drive share links to thumbnail URLs
-// Usage: convertDriveLink("https://drive.google.com/file/d/FILE_ID/view?usp=drive_link")
-// Returns: "https://drive.google.com/thumbnail?id=FILE_ID&sz=w800"
-export const convertDriveLink = (driveLink: string): string => {
-  const match = driveLink.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) {
-    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
-  }
-  return driveLink;
-};
+import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import { useGoogleSheetFish } from "@/hooks/useGoogleSheetFish";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Peixes = () => {
+  const { data: fishInventory, isLoading, isError, refetch, isFetching } = useGoogleSheetFish();
+
   return (
     <Layout>
       <PageHero
@@ -38,7 +18,35 @@ const Peixes = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          {fishInventory.length === 0 ? (
+          {/* Refresh indicator */}
+          {isFetching && !isLoading && (
+            <div className="flex items-center justify-center gap-2 mb-6 text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              <span className="text-sm">A atualizar inventário...</span>
+            </div>
+          )}
+
+          {/* Loading state with skeletons */}
+          {isLoading ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : isError ? (
+            /* Error state */
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+              <h3 className="text-lg font-medium mb-2">Erro ao carregar inventário</h3>
+              <p className="text-muted-foreground mb-4">
+                Não foi possível obter os dados. Por favor, tenta novamente.
+              </p>
+              <Button onClick={() => refetch()} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar novamente
+              </Button>
+            </div>
+          ) : !fishInventory || fishInventory.length === 0 ? (
             <p className="text-center text-muted-foreground">Nenhum peixe disponível de momento.</p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">

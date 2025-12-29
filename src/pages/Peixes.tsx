@@ -27,10 +27,10 @@ const Peixes = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {fishData.map((fish, index) => (
               <div key={`${fish.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
-                <ProductCard {...fish} />
+                <ProductCard {...fish} showWhatsAppButton />
               </div>
             ))}
           </div>

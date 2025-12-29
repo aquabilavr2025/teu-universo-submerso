@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,63 +6,63 @@
 
 @layer base {
   :root {
-    --background: 200 30% 98%;
-    --foreground: 210 50% 10%;
+    --background: 0 0% 100%;
+    --foreground: 220 20% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 50% 10%;
+    --card-foreground: 220 20% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 50% 10%;
+    --popover-foreground: 220 20% 10%;
 
-    --primary: 195 85% 35%;
+    --primary: 195 80% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 180 45% 92%;
-    --secondary-foreground: 195 85% 25%;
+    --secondary: 200 20% 96%;
+    --secondary-foreground: 200 30% 30%;
 
-    --muted: 200 25% 95%;
-    --muted-foreground: 210 20% 45%;
+    --muted: 210 15% 96%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 175 70% 40%;
+    --accent: 180 60% 42%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 200 25% 88%;
-    --input: 200 25% 88%;
-    --ring: 195 85% 35%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 195 80% 40%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Custom aquatic tokens */
-    --ocean-deep: 210 75% 20%;
-    --ocean-mid: 200 70% 35%;
-    --ocean-light: 190 65% 50%;
-    --teal: 175 65% 45%;
-    --aqua: 180 55% 60%;
-    --foam: 185 40% 95%;
-    --coral: 15 85% 60%;
-    --sand: 40 30% 85%;
+    /* Custom aquatic tokens - refined for Apple aesthetic */
+    --ocean-deep: 210 50% 18%;
+    --ocean-mid: 200 55% 35%;
+    --ocean-light: 195 50% 50%;
+    --teal: 180 55% 42%;
+    --aqua: 185 45% 55%;
+    --foam: 200 20% 98%;
+    --coral: 15 75% 55%;
+    --sand: 40 25% 88%;
 
-    /* Gradients */
-    --gradient-ocean: linear-gradient(135deg, hsl(210 75% 20%), hsl(195 85% 35%), hsl(175 65% 45%));
-    --gradient-surface: linear-gradient(180deg, hsl(185 40% 95%), hsl(200 30% 98%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(185 40% 98%));
+    /* Gradients - subtle and elegant */
+    --gradient-ocean: linear-gradient(135deg, hsl(210 50% 18%), hsl(195 80% 40%), hsl(180 55% 42%));
+    --gradient-surface: linear-gradient(180deg, hsl(200 20% 98%), hsl(0 0% 100%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(200 20% 99%));
     
-    /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(195 85% 35% / 0.15);
-    --shadow-glow: 0 0 30px hsl(175 65% 45% / 0.2);
-    --shadow-card: 0 8px 30px -8px hsl(210 75% 20% / 0.12);
+    /* Shadows - refined Apple-style */
+    --shadow-soft: 0 2px 15px -3px hsl(220 20% 10% / 0.08);
+    --shadow-glow: 0 0 40px hsl(195 80% 40% / 0.15);
+    --shadow-card: 0 4px 25px -5px hsl(220 20% 10% / 0.08);
 
-    /* Fonts */
-    --font-heading: 'Cormorant Garamond', serif;
-    --font-body: 'DM Sans', sans-serif;
+    /* Fonts - Apple-inspired */
+    --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-    /* Transitions */
-    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Transitions - smooth and refined */
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;

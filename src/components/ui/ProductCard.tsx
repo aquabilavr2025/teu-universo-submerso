@@ -8,10 +8,11 @@ interface ProductCardProps {
   price: string;
   description?: string;
   category?: string;
+  quantity?: number;
   showWhatsAppButton?: boolean;
 }
 
-const ProductCard = ({ image, name, price, description, category, showWhatsAppButton = false }: ProductCardProps) => {
+const ProductCard = ({ image, name, price, description, category, quantity, showWhatsAppButton = false }: ProductCardProps) => {
   const whatsappNumber = "351912345678"; // Replace with actual number
   const whatsappMessage = encodeURIComponent(`Olá! Gostaria de encomendar: ${name} (${price})`);
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
@@ -26,11 +27,18 @@ const ProductCard = ({ image, name, price, description, category, showWhatsAppBu
         />
       </div>
       <CardContent className="p-6 space-y-3">
-        {category && (
-          <span className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
-            {category}
-          </span>
-        )}
+        <div className="flex items-center justify-between">
+          {category && (
+            <span className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
+              {category}
+            </span>
+          )}
+          {quantity !== undefined && (
+            <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${quantity > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {quantity > 0 ? `${quantity} em stock` : 'Esgotado'}
+            </span>
+          )}
+        </div>
         <h3 className="font-heading text-lg font-semibold text-foreground line-clamp-1 tracking-tight">
           {name}
         </h3>

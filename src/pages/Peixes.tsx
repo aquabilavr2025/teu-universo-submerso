@@ -28,8 +28,8 @@ const Peixes = () => {
 
           {/* Loading state with skeletons */}
           {isLoading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Array.from({ length: 6 }).map((_, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, index) => (
                 <ProductCardSkeleton key={index} />
               ))}
             </div>
@@ -49,16 +49,18 @@ const Peixes = () => {
           ) : !fishInventory || fishInventory.length === 0 ? (
             <p className="text-center text-muted-foreground">Nenhum peixe disponível de momento.</p>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            /* Dynamic responsive grid: 1 col mobile, 2 col tablet, 3-4 col desktop */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {fishInventory.map((fish, index) => (
-                <div key={`${fish.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                <div 
+                  key={`${fish.name}-${index}`} 
+                  className="animate-fade-in" 
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
                   <ProductCard 
                     image={fish.image}
                     name={fish.name}
                     price={fish.price}
-                    category={fish.category}
-                    description={fish.description}
-                    quantity={fish.quantity}
                     showWhatsAppButton 
                   />
                 </div>

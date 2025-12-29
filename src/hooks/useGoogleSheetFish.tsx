@@ -3,10 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 export interface FishItem {
   image: string;
   name: string;
-  quantity: number;
   price: string;
-  category?: string;
-  description?: string;
 }
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
@@ -55,20 +52,17 @@ const fetchFishData = async (): Promise<FishItem[]> => {
   const csvText = await response.text();
   const rows = parseCSV(csvText);
   
-  // Skip header row and map data
-  // Expected format: [Image Link], [Fish Name], [Quantity], [Price]
-  const fishItems: FishItem[] = rows.slice(1).map((row) => {
-    const [imageLink, name, quantityStr, priceStr, category, description] = row;
+  // Map data - spreadsheet format: [Image URL], [Name], [Price]
+  // No header row based on actual CSV response
+  const fishItems: FishItem[] = rows.map((row) => {
+    const [imageLink, name, priceStr] = row;
     
     return {
       image: convertDriveLink(imageLink?.trim() || ""),
-      name: name?.trim() || "Unknown",
-      quantity: parseInt(quantityStr?.trim() || "0", 10) || 0,
+      name: name?.trim() || "",
       price: formatPrice(priceStr?.trim() || "0"),
-      category: category?.trim() || "Peixe",
-      description: description?.trim() || "",
     };
-  }).filter(fish => fish.name && fish.name !== "Unknown" && fish.image);
+  }).filter(fish => fish.name && fish.image);
   
   return fishItems;
 };
@@ -127,8 +121,8 @@ export const useGoogleSheetFish = () => {
   return useQuery({
     queryKey: ["fish-inventory"],
     queryFn: fetchFishData,
-    staleTime: 0, // Always consider data stale
-    gcTime: 0, // Don't cache (formerly cacheTime)
+    staleTime: 0,
+    gcTime: 0,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   });

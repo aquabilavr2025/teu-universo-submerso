@@ -26,8 +26,8 @@ const Navbar = () => {
             <div className="w-10 h-10 rounded-full gradient-ocean flex items-center justify-center shadow-glow group-hover:scale-110 transition-bounce">
               <Fish className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-heading text-xl font-semibold text-foreground hidden sm:block">
-              O teu universo submerso
+            <span className="font-heading text-xl font-semibold text-foreground hidden sm:block tracking-tight">
+              AquaBila
             </span>
           </Link>
 

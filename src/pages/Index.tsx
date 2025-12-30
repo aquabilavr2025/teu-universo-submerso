@@ -3,10 +3,10 @@ import { ArrowRight, Fish, Leaf, Droplets, Zap, UtensilsCrossed, Layers } from "
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
+import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import { useGoogleSheet } from "@/hooks/useGoogleSheet";
 import heroImage from "@/assets/hero-aquarium.jpg";
 import fishBetta from "@/assets/fish-betta.jpg";
-import fishNeon from "@/assets/fish-neon.jpg";
-import fishDiscus from "@/assets/fish-discus.jpg";
 import plantsImage from "@/assets/plants.jpg";
 import foodImage from "@/assets/food.jpg";
 import equipmentImage from "@/assets/equipment.jpg";
@@ -14,11 +14,10 @@ import waterCareImage from "@/assets/water-care.jpg";
 import substrateImage from "@/assets/substrate.jpg";
 
 const Index = () => {
-  const featuredFish = [
-    { image: fishBetta, name: "Betta Splendens", price: "€8,99", category: "Tropical" },
-    { image: fishNeon, name: "Neon Tetra", price: "€1,50", category: "Cardume" },
-    { image: fishDiscus, name: "Discus", price: "€45,00", category: "Premium" },
-  ];
+  const { data: fishData, isLoading: isFishLoading } = useGoogleSheet("peixes");
+  
+  // Get first 3 fish as featured
+  const featuredFish = fishData?.slice(0, 3) || [];
 
   const categories = [
     { icon: Fish, title: "Peixes", description: "Espécies tropicais e de água fria", href: "/peixes", image: fishBetta },
@@ -114,7 +113,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Fish Section */}
+      {/* Featured Fish Section - Dynamic from Google Sheets */}
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
@@ -135,11 +134,26 @@ const Index = () => {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredFish.map((fish, index) => (
-              <div key={fish.name} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <ProductCard {...fish} />
-              </div>
-            ))}
+            {isFishLoading ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))
+            ) : featuredFish.length > 0 ? (
+              featuredFish.map((fish, index) => (
+                <div key={`${fish.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <ProductCard 
+                    image={fish.image}
+                    name={fish.name}
+                    price={fish.price}
+                    showAddToCart
+                  />
+                </div>
+              ))
+            ) : (
+              <p className="col-span-3 text-center text-muted-foreground">
+                Peixes em destaque a carregar...
+              </p>
+            )}
           </div>
         </div>
       </section>

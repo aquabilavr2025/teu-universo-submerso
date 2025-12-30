@@ -1,12 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 
-export interface FishItem {
+export interface ProductItem {
   image: string;
   name: string;
   price: string;
 }
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
+
+// Sheet tab GIDs - get these from the Google Sheet URL when viewing each tab
+const SHEET_TABS: Record<string, string> = {
+  peixes: "0", // Default first sheet
+  plantas: "1",
+  alimentação: "2",
+  "condicionadores\\fertilizantes": "3",
+  "filtragem e iluminação": "4",
+  substratos: "5",
+};
 
 // Convert Google Drive share links to thumbnail URLs
 const convertDriveLink = (driveLink: string): string => {
@@ -30,41 +40,6 @@ const convertDriveLink = (driveLink: string): string => {
   }
   
   return driveLink;
-};
-
-const fetchFishData = async (): Promise<FishItem[]> => {
-  // Use Google Sheets CSV export endpoint with cache-busting
-  const timestamp = Date.now();
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&_t=${timestamp}`;
-  
-  const response = await fetch(url, {
-    cache: "no-store",
-    headers: {
-      "Cache-Control": "no-cache, no-store, must-revalidate",
-      "Pragma": "no-cache",
-    },
-  });
-  
-  if (!response.ok) {
-    throw new Error("Failed to fetch spreadsheet data");
-  }
-  
-  const csvText = await response.text();
-  const rows = parseCSV(csvText);
-  
-  // Map data - spreadsheet format: [Image URL], [Name], [Price]
-  // No header row based on actual CSV response
-  const fishItems: FishItem[] = rows.map((row) => {
-    const [imageLink, name, priceStr] = row;
-    
-    return {
-      image: convertDriveLink(imageLink?.trim() || ""),
-      name: name?.trim() || "",
-      price: formatPrice(priceStr?.trim() || "0"),
-    };
-  }).filter(fish => fish.name && fish.image);
-  
-  return fishItems;
 };
 
 // Simple CSV parser that handles quoted fields
@@ -117,10 +92,44 @@ const formatPrice = (price: string): string => {
   return `${cleanPrice}€`;
 };
 
-export const useGoogleSheetFish = () => {
+const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
+  const gid = SHEET_TABS[tabName] || "0";
+  const timestamp = Date.now();
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}&_t=${timestamp}`;
+  
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+    },
+  });
+  
+  if (!response.ok) {
+    throw new Error("Failed to fetch spreadsheet data");
+  }
+  
+  const csvText = await response.text();
+  const rows = parseCSV(csvText);
+  
+  // Map data - spreadsheet format: [Image URL], [Name], [Price]
+  const items: ProductItem[] = rows.map((row) => {
+    const [imageLink, name, priceStr] = row;
+    
+    return {
+      image: convertDriveLink(imageLink?.trim() || ""),
+      name: name?.trim() || "",
+      price: formatPrice(priceStr?.trim() || "0"),
+    };
+  }).filter(item => item.name && item.image);
+  
+  return items;
+};
+
+export const useGoogleSheet = (tabName: string) => {
   return useQuery({
-    queryKey: ["fish-inventory"],
-    queryFn: fetchFishData,
+    queryKey: ["sheet-inventory", tabName],
+    queryFn: () => fetchSheetData(tabName),
     staleTime: 0,
     gcTime: 0,
     refetchOnWindowFocus: true,

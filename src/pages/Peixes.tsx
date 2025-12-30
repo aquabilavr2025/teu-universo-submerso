@@ -2,12 +2,12 @@ import Layout from "@/components/layout/Layout";
 import PageHero from "@/components/ui/PageHero";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
-import { useGoogleSheetFish } from "@/hooks/useGoogleSheetFish";
+import { useGoogleSheet } from "@/hooks/useGoogleSheet";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Peixes = () => {
-  const { data: fishInventory, isLoading, isError, refetch, isFetching } = useGoogleSheetFish();
+  const { data: fishInventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("peixes");
 
   return (
     <Layout>
@@ -18,7 +18,6 @@ const Peixes = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          {/* Refresh indicator */}
           {isFetching && !isLoading && (
             <div className="flex items-center justify-center gap-2 mb-6 text-muted-foreground">
               <RefreshCw className="h-4 w-4 animate-spin" />
@@ -26,7 +25,6 @@ const Peixes = () => {
             </div>
           )}
 
-          {/* Loading state with skeletons */}
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {Array.from({ length: 8 }).map((_, index) => (
@@ -34,7 +32,6 @@ const Peixes = () => {
               ))}
             </div>
           ) : isError ? (
-            /* Error state */
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <AlertCircle className="h-12 w-12 text-destructive mb-4" />
               <h3 className="text-lg font-medium mb-2">Erro ao carregar inventário</h3>
@@ -49,7 +46,6 @@ const Peixes = () => {
           ) : !fishInventory || fishInventory.length === 0 ? (
             <p className="text-center text-muted-foreground">Nenhum peixe disponível de momento.</p>
           ) : (
-            /* Dynamic responsive grid: 1 col mobile, 2 col tablet, 3-4 col desktop */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {fishInventory.map((fish, index) => (
                 <div 
@@ -57,7 +53,7 @@ const Peixes = () => {
                   className="animate-fade-in" 
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                <ProductCard 
+                  <ProductCard 
                     image={fish.image}
                     name={fish.name}
                     price={fish.price}

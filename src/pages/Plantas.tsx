@@ -1,21 +1,14 @@
 import Layout from "@/components/layout/Layout";
 import PageHero from "@/components/ui/PageHero";
 import ProductCard from "@/components/ui/ProductCard";
-import plantsImage from "@/assets/plants.jpg";
-
-const plantsData = [
-  { image: plantsImage, name: "Rotala Rotundifolia", price: "€3,50", category: "Hastes", description: "Planta de crescimento rápido, cor verde a vermelha" },
-  { image: plantsImage, name: "Anubias Nana", price: "€6,00", category: "Epífita", description: "Resistente e fácil de manter" },
-  { image: plantsImage, name: "Cryptocoryne Wendtii", price: "€4,50", category: "Roseta", description: "Folhas onduladas castanhas ou verdes" },
-  { image: plantsImage, name: "Monte Carlo", price: "€5,00", category: "Tapete", description: "Perfeita para carpete verde" },
-  { image: plantsImage, name: "Bucephalandra", price: "€8,00", category: "Epífita", description: "Folhas decorativas e únicas" },
-  { image: plantsImage, name: "Vallisneria", price: "€2,50", category: "Fundo", description: "Folhas longas para o fundo do aquário" },
-  { image: plantsImage, name: "Java Moss", price: "€4,00", category: "Musgo", description: "Versátil e fácil de cultivar" },
-  { image: plantsImage, name: "Ludwigia Palustris", price: "€3,50", category: "Hastes", description: "Cores vermelhas intensas" },
-  { image: plantsImage, name: "Echinodorus", price: "€7,00", category: "Roseta", description: "Planta imponente para aquários grandes" },
-];
+import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import { useGoogleSheet } from "@/hooks/useGoogleSheet";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Plantas = () => {
+  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("plantas");
+
   return (
     <Layout>
       <PageHero
@@ -25,13 +18,51 @@ const Plantas = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {plantsData.map((plant, index) => (
-              <div key={`${plant.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
-                <ProductCard {...plant} />
-              </div>
-            ))}
-          </div>
+          {isFetching && !isLoading && (
+            <div className="flex items-center justify-center gap-2 mb-6 text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              <span className="text-sm">A atualizar inventário...</span>
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+              <h3 className="text-lg font-medium mb-2">Erro ao carregar inventário</h3>
+              <p className="text-muted-foreground mb-4">
+                Não foi possível obter os dados. Por favor, tenta novamente.
+              </p>
+              <Button onClick={() => refetch()} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar novamente
+              </Button>
+            </div>
+          ) : !inventory || inventory.length === 0 ? (
+            <p className="text-center text-muted-foreground">Nenhuma planta disponível de momento.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {inventory.map((item, index) => (
+                <div 
+                  key={`${item.name}-${index}`} 
+                  className="animate-fade-in" 
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <ProductCard 
+                    image={item.image}
+                    name={item.name}
+                    price={item.price}
+                    showAddToCart
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </Layout>

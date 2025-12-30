@@ -1,21 +1,14 @@
 import Layout from "@/components/layout/Layout";
 import PageHero from "@/components/ui/PageHero";
 import ProductCard from "@/components/ui/ProductCard";
-import waterCareImage from "@/assets/water-care.jpg";
-
-const conditionersData = [
-  { image: waterCareImage, name: "Condicionador de Água", price: "€9,99", category: "Condicionador", description: "Remove cloro e cloraminas da água" },
-  { image: waterCareImage, name: "Bactérias Nitrificantes", price: "€12,00", category: "Bactérias", description: "Acelera o ciclo do azoto" },
-  { image: waterCareImage, name: "Fertilizante Líquido", price: "€8,50", category: "Fertilizante", description: "Macro e micronutrientes para plantas" },
-  { image: waterCareImage, name: "CO2 Líquido", price: "€7,00", category: "CO2", description: "Fonte de carbono para plantas" },
-  { image: waterCareImage, name: "Anti-Algas", price: "€6,50", category: "Tratamento", description: "Combate algas indesejadas" },
-  { image: waterCareImage, name: "Ferro Líquido", price: "€5,50", category: "Fertilizante", description: "Essencial para plantas vermelhas" },
-  { image: waterCareImage, name: "Redutor de pH", price: "€6,00", category: "pH", description: "Baixa o pH de forma segura" },
-  { image: waterCareImage, name: "Vitaminas para Peixes", price: "€8,00", category: "Suplemento", description: "Fortalece o sistema imunitário" },
-  { image: waterCareImage, name: "Teste de Água 6 em 1", price: "€15,00", category: "Testes", description: "Mede pH, NO2, NO3, GH, KH, Cl" },
-];
+import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import { useGoogleSheet } from "@/hooks/useGoogleSheet";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Condicionadores = () => {
+  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("condicionadores\\fertilizantes");
+
   return (
     <Layout>
       <PageHero
@@ -25,13 +18,51 @@ const Condicionadores = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {conditionersData.map((item, index) => (
-              <div key={`${item.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
-                <ProductCard {...item} />
-              </div>
-            ))}
-          </div>
+          {isFetching && !isLoading && (
+            <div className="flex items-center justify-center gap-2 mb-6 text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              <span className="text-sm">A atualizar inventário...</span>
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+              <h3 className="text-lg font-medium mb-2">Erro ao carregar inventário</h3>
+              <p className="text-muted-foreground mb-4">
+                Não foi possível obter os dados. Por favor, tenta novamente.
+              </p>
+              <Button onClick={() => refetch()} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar novamente
+              </Button>
+            </div>
+          ) : !inventory || inventory.length === 0 ? (
+            <p className="text-center text-muted-foreground">Nenhum condicionador disponível de momento.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {inventory.map((item, index) => (
+                <div 
+                  key={`${item.name}-${index}`} 
+                  className="animate-fade-in" 
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <ProductCard 
+                    image={item.image}
+                    name={item.name}
+                    price={item.price}
+                    showAddToCart
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </Layout>

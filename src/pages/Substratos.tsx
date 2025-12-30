@@ -1,21 +1,14 @@
 import Layout from "@/components/layout/Layout";
 import PageHero from "@/components/ui/PageHero";
 import ProductCard from "@/components/ui/ProductCard";
-import substrateImage from "@/assets/substrate.jpg";
-
-const substratesData = [
-  { image: substrateImage, name: "ADA Amazonia", price: "€35,00", category: "Fértil", description: "Substrato nutritivo japonês premium" },
-  { image: substrateImage, name: "Areia de Sílica", price: "€8,00", category: "Inerte", description: "Areia fina natural para aquários" },
-  { image: substrateImage, name: "Basalto Negro", price: "€12,00", category: "Inerte", description: "Cascalho negro decorativo" },
-  { image: substrateImage, name: "Substrato Fértil Nacional", price: "€18,00", category: "Fértil", description: "Rico em nutrientes essenciais" },
-  { image: substrateImage, name: "Cascalho Natural", price: "€6,00", category: "Inerte", description: "Pedras roladas de rio" },
-  { image: substrateImage, name: "Lava Rocks", price: "€10,00", category: "Decorativo", description: "Pedras de lava porosas" },
-  { image: substrateImage, name: "Power Sand", price: "€28,00", category: "Base", description: "Camada base para substratos férteis" },
-  { image: substrateImage, name: "Areia Branca", price: "€7,00", category: "Inerte", description: "Areia decorativa clara" },
-  { image: substrateImage, name: "Soil Completo", price: "€22,00", category: "Fértil", description: "Substrato ativo para plantas" },
-];
+import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import { useGoogleSheet } from "@/hooks/useGoogleSheet";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Substratos = () => {
+  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("substratos");
+
   return (
     <Layout>
       <PageHero
@@ -25,13 +18,51 @@ const Substratos = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {substratesData.map((item, index) => (
-              <div key={`${item.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
-                <ProductCard {...item} />
-              </div>
-            ))}
-          </div>
+          {isFetching && !isLoading && (
+            <div className="flex items-center justify-center gap-2 mb-6 text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              <span className="text-sm">A atualizar inventário...</span>
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+              <h3 className="text-lg font-medium mb-2">Erro ao carregar inventário</h3>
+              <p className="text-muted-foreground mb-4">
+                Não foi possível obter os dados. Por favor, tenta novamente.
+              </p>
+              <Button onClick={() => refetch()} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar novamente
+              </Button>
+            </div>
+          ) : !inventory || inventory.length === 0 ? (
+            <p className="text-center text-muted-foreground">Nenhum substrato disponível de momento.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {inventory.map((item, index) => (
+                <div 
+                  key={`${item.name}-${index}`} 
+                  className="animate-fade-in" 
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <ProductCard 
+                    image={item.image}
+                    name={item.name}
+                    price={item.price}
+                    showAddToCart
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </Layout>

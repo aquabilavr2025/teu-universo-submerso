@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Fish, Instagram, Facebook, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
+import { Fish, Instagram, Facebook, MessageCircle, Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,7 +93,7 @@ const Footer = () => {
             </nav>
           </div>
 
-          {/* Contact Info */}
+          {/* Contact Info & Legal */}
           <div className="space-y-6">
             <h3 className="font-heading text-xl font-semibold">Contactos</h3>
             <div className="space-y-4">
@@ -117,6 +117,34 @@ const Footer = () => {
                 <MapPin className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
                 <span>Rua das Águas Claras, 123<br />4000-001 Porto, Portugal</span>
               </div>
+            </div>
+
+            {/* Legal Links */}
+            <div className="pt-4 border-t border-primary-foreground/20">
+              <h4 className="font-heading text-lg font-medium mb-3">Informação Legal</h4>
+              <nav className="flex flex-col gap-2">
+                <Link
+                  to="/termos-legais"
+                  className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth text-sm"
+                >
+                  Termos Legais
+                </Link>
+                <Link
+                  to="/envios-devolucoes"
+                  className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth text-sm"
+                >
+                  Envios e Devoluções
+                </Link>
+                <a
+                  href="https://www.livroreclamacoes.pt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-smooth text-sm"
+                >
+                  Livro de Reclamações
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </nav>
             </div>
           </div>
 

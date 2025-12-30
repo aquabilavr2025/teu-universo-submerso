@@ -57,11 +57,11 @@ const Peixes = () => {
                   className="animate-fade-in" 
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  <ProductCard 
+                <ProductCard 
                     image={fish.image}
                     name={fish.name}
                     price={fish.price}
-                    showWhatsAppButton 
+                    showAddToCart
                   />
                 </div>
               ))}

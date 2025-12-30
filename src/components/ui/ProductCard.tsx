@@ -1,6 +1,8 @@
-import { MessageCircle } from "lucide-react";
+import { ShoppingCart, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   image: string;
@@ -10,12 +12,50 @@ interface ProductCardProps {
   category?: string;
   quantity?: number;
   showWhatsAppButton?: boolean;
+  showAddToCart?: boolean;
 }
 
-const ProductCard = ({ image, name, price, description, category, quantity, showWhatsAppButton = false }: ProductCardProps) => {
+// Parse price string to number (e.g., "2,50€" -> 2.5)
+const parsePriceToNumber = (price: string): number => {
+  const cleanPrice = price.replace("€", "").replace(",", ".").trim();
+  return parseFloat(cleanPrice) || 0;
+};
+
+// Generate unique ID from name
+const generateId = (name: string): string => {
+  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+};
+
+const ProductCard = ({
+  image,
+  name,
+  price,
+  description,
+  category,
+  quantity,
+  showWhatsAppButton = false,
+  showAddToCart = false,
+}: ProductCardProps) => {
+  const cart = useCart();
+
   const whatsappNumber = "351912345678"; // Replace with actual number
-  const whatsappMessage = encodeURIComponent(`Olá! Gostaria de encomendar: ${name} - Preço: ${price}`);
+  const whatsappMessage = encodeURIComponent(
+    `Olá! Gostaria de encomendar: ${name} - Preço: ${price}`
+  );
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+  const handleAddToCart = () => {
+    cart.addItem({
+      id: generateId(name),
+      name,
+      price,
+      priceValue: parsePriceToNumber(price),
+      image,
+    });
+    toast.success(`${name} adicionado ao carrinho!`, {
+      duration: 2000,
+    });
+  };
 
   return (
     <Card className="group overflow-hidden bg-card border border-border/40 rounded-2xl shadow-card hover:shadow-glow transition-smooth hover:-translate-y-1 h-full flex flex-col">
@@ -37,33 +77,51 @@ const ProductCard = ({ image, name, price, description, category, quantity, show
               </span>
             )}
             {quantity !== undefined && (
-              <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${quantity > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                {quantity > 0 ? `${quantity} em stock` : 'Esgotado'}
+              <span
+                className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
+                  quantity > 0
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                }`}
+              >
+                {quantity > 0 ? `${quantity} em stock` : "Esgotado"}
               </span>
             )}
           </div>
         )}
-        
+
         {/* Product name */}
         <h3 className="font-heading text-lg font-semibold text-foreground line-clamp-2 tracking-tight mb-2">
           {name}
         </h3>
-        
+
         {/* Description */}
         {description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed mb-3">{description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed mb-3">
+            {description}
+          </p>
         )}
-        
+
         {/* Spacer to push price/button to bottom */}
         <div className="flex-1" />
-        
-        {/* Price and WhatsApp button */}
+
+        {/* Price and buttons */}
         <div className="flex items-center justify-between pt-3 border-t border-border/30">
           <p className="font-body text-xl font-bold text-foreground">{price}</p>
-          {showWhatsAppButton && (
-            <Button 
-              asChild 
-              size="sm" 
+          {showAddToCart && (
+            <Button
+              size="sm"
+              onClick={handleAddToCart}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 rounded-full px-4 transition-bounce hover:scale-105"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Adicionar
+            </Button>
+          )}
+          {showWhatsAppButton && !showAddToCart && (
+            <Button
+              asChild
+              size="sm"
               className="bg-[#25D366] hover:bg-[#20BD5A] text-white gap-2 rounded-full px-4"
             >
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
@@ -73,10 +131,12 @@ const ProductCard = ({ image, name, price, description, category, quantity, show
             </Button>
           )}
         </div>
-        
-        {showWhatsAppButton && (
+
+        {(showWhatsAppButton || showAddToCart) && (
           <p className="text-xs text-muted-foreground text-center pt-2">
-            Atendimento personalizado via WhatsApp
+            {showAddToCart
+              ? "Adicione ao carrinho e finalize via WhatsApp"
+              : "Atendimento personalizado via WhatsApp"}
           </p>
         )}
       </CardContent>

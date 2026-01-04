@@ -8,14 +8,14 @@ export interface ProductItem {
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 
-// Sheet tab GIDs - get these from the Google Sheet URL when viewing each tab
-const SHEET_TABS: Record<string, string> = {
-  peixes: "0", // Default first sheet
-  plantas: "1",
-  alimentação: "2",
-  "condicionadores\\fertilizantes": "3",
-  "filtragem e iluminação": "4",
-  substratos: "5",
+// Sheet names exactly as they appear in Google Sheets (case-sensitive)
+const SHEET_NAMES: Record<string, string> = {
+  peixes: "peixes",
+  plantas: "plantas",
+  alimentação: "alimentação",
+  "condicionadores\\fertilizantes": "condicionadores\\fertilizantes",
+  "filtragem e iluminação": "filtragem e iluminação",
+  substratos: "substratos",
 };
 
 // Convert Google Drive share links to thumbnail URLs
@@ -37,6 +37,12 @@ const convertDriveLink = (driveLink: string): string => {
   const idMatch = driveLink.match(/id=([a-zA-Z0-9_-]+)/);
   if (idMatch) {
     return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+  }
+  
+  // Handle open?id= format
+  const openMatch = driveLink.match(/open\?id=([a-zA-Z0-9_-]+)/);
+  if (openMatch) {
+    return `https://drive.google.com/thumbnail?id=${openMatch[1]}&sz=w800`;
   }
   
   return driveLink;
@@ -80,6 +86,8 @@ const parseCSV = (csv: string): string[][] => {
 
 // Format price to ensure Euro format
 const formatPrice = (price: string): string => {
+  if (!price) return "0€";
+  
   // Remove any existing currency symbols and clean up
   const cleanPrice = price.replace(/[€$]/g, "").trim();
   
@@ -93,9 +101,14 @@ const formatPrice = (price: string): string => {
 };
 
 const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
-  const gid = SHEET_TABS[tabName] || "0";
+  const sheetName = SHEET_NAMES[tabName] || tabName;
   const timestamp = Date.now();
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}&_t=${timestamp}`;
+  
+  // Use sheet name directly in the URL with proper encoding
+  const encodedSheetName = encodeURIComponent(sheetName);
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodedSheetName}&_t=${timestamp}`;
+  
+  console.log(`Fetching sheet: ${sheetName} from URL: ${url}`);
   
   const response = await fetch(url, {
     cache: "no-store",
@@ -106,14 +119,18 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
   });
   
   if (!response.ok) {
-    throw new Error("Failed to fetch spreadsheet data");
+    console.error(`Failed to fetch sheet ${sheetName}: ${response.status}`);
+    throw new Error(`Failed to fetch spreadsheet data for ${sheetName}`);
   }
   
   const csvText = await response.text();
+  console.log(`Raw CSV for ${sheetName}:`, csvText.substring(0, 500));
+  
   const rows = parseCSV(csvText);
   
-  // Map data - spreadsheet format: [Image URL], [Name], [Price]
-  const items: ProductItem[] = rows.map((row) => {
+  // Skip header row (first row) and map data
+  // Spreadsheet format: [Image URL], [Name], [Price]
+  const items: ProductItem[] = rows.slice(1).map((row) => {
     const [imageLink, name, priceStr] = row;
     
     return {
@@ -121,7 +138,9 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
       name: name?.trim() || "",
       price: formatPrice(priceStr?.trim() || "0"),
     };
-  }).filter(item => item.name && item.image);
+  }).filter(item => item.name && item.name.length > 0);
+  
+  console.log(`Parsed ${items.length} items from ${sheetName}`);
   
   return items;
 };
@@ -134,5 +153,6 @@ export const useGoogleSheet = (tabName: string) => {
     gcTime: 0,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
+    retry: 2,
   });
 };

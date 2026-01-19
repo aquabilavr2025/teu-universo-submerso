@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Fish, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { SearchDialog } from "@/components/search/SearchDialog";
+import { SearchTrigger, SearchBar } from "@/components/search/SearchTrigger";
 
 const navLinks = [
   { href: "/", label: "Início" },
@@ -16,6 +18,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
   const { totalItems, setIsOpen: setCartOpen } = useCart();
 
@@ -50,8 +53,14 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Cart and Mobile Menu */}
+          {/* Search, Cart and Mobile Menu */}
           <div className="flex items-center gap-2">
+            {/* Search Bar (Desktop) */}
+            <SearchBar onClick={() => setSearchOpen(true)} />
+            
+            {/* Search Icon (Mobile) */}
+            <SearchTrigger onClick={() => setSearchOpen(true)} className="md:hidden" />
+            
             {/* Cart Button */}
             <Button
               variant="ghost"
@@ -101,6 +110,9 @@ const Navbar = () => {
           </div>
         )}
       </div>
+      
+      {/* Search Dialog */}
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </nav>
   );
 };

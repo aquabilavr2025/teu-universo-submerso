@@ -6,7 +6,9 @@ const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 // All categories to fetch for global search
 const CATEGORIES = [
   { key: "peixes", label: "Peixes", path: "/peixes" },
-  { key: "plantas", label: "Plantas", path: "/plantas" },
+  { key: "Plantas em Vaso", label: "Plantas em Vaso", path: "/plantas" },
+  { key: "Plantas in Vitro", label: "Plantas in Vitro", path: "/plantas" },
+  { key: "Plantas em Clip", label: "Plantas em Clip", path: "/plantas" },
   { key: "alimentação", label: "Alimentação", path: "/alimentacao" },
   { key: "condicionadores\\fertilizantes", label: "Condicionadores", path: "/condicionadores" },
   { key: "filtragem e iluminação", label: "Equipamentos", path: "/equipamentos" },

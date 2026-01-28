@@ -12,6 +12,9 @@ const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 const SHEET_NAMES: Record<string, string> = {
   peixes: "peixes",
   plantas: "plantas",
+  "plantas-vaso": "Plantas em Vaso",
+  "plantas-vitro": "Plantas in Vitro",
+  "plantas-clip": "Plantas em Clip",
   alimentação: "alimentação",
   "condicionadores\\fertilizantes": "condicionadores\\fertilizantes",
   "filtragem e iluminação": "filtragem e iluminação",

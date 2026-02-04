@@ -1,89 +1,31 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Fish, Leaf, Droplets, Zap, UtensilsCrossed, Layers, RefreshCw } from "lucide-react";
+import { ArrowRight, Fish, Leaf, Droplets, Zap, UtensilsCrossed, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
-import { useGoogleSheet, useHomepageImages } from "@/hooks/useGoogleSheet";
-import { useState, useEffect, useMemo, useCallback } from "react";
-
-// Fallback images
-import heroImageFallback from "@/assets/hero-aquarium.jpg";
-import fishBettaFallback from "@/assets/fish-betta.jpg";
-import plantsImageFallback from "@/assets/plants.jpg";
-import foodImageFallback from "@/assets/food.jpg";
-import equipmentImageFallback from "@/assets/equipment.jpg";
-import waterCareImageFallback from "@/assets/water-care.jpg";
-import substrateImageFallback from "@/assets/substrate.jpg";
+import { useGoogleSheet } from "@/hooks/useGoogleSheet";
+import heroImage from "@/assets/hero-aquarium.jpg";
+import fishBetta from "@/assets/fish-betta.jpg";
+import plantsImage from "@/assets/plants.jpg";
+import foodImage from "@/assets/food.jpg";
+import equipmentImage from "@/assets/equipment.jpg";
+import waterCareImage from "@/assets/water-care.jpg";
+import substrateImage from "@/assets/substrate.jpg";
 
 const Index = () => {
   const { data: fishData, isLoading: isFishLoading } = useGoogleSheet("peixes");
-  const { data: homepageImages, isLoading: isImagesLoading } = useHomepageImages();
   
-  // Random fish state with auto-rotation
-  const [randomFishIndices, setRandomFishIndices] = useState<number[]>([0, 1, 2]);
-  const [isRotating, setIsRotating] = useState(true);
-  
-  // Get fish with images for featured section
-  const fishWithImages = useMemo(() => {
-    return fishData?.filter(fish => fish.image && fish.image.length > 0) || [];
-  }, [fishData]);
-  
-  // Shuffle function to get random indices
-  const shuffleFish = useCallback(() => {
-    if (fishWithImages.length < 3) return;
-    
-    const indices: number[] = [];
-    const used = new Set<number>();
-    
-    while (indices.length < 3 && indices.length < fishWithImages.length) {
-      const randomIndex = Math.floor(Math.random() * fishWithImages.length);
-      if (!used.has(randomIndex)) {
-        used.add(randomIndex);
-        indices.push(randomIndex);
-      }
-    }
-    
-    setRandomFishIndices(indices);
-  }, [fishWithImages.length]);
-  
-  // Auto-rotate every 8 seconds
-  useEffect(() => {
-    if (!isRotating || fishWithImages.length < 3) return;
-    
-    // Initial shuffle
-    shuffleFish();
-    
-    const interval = setInterval(shuffleFish, 8000);
-    return () => clearInterval(interval);
-  }, [isRotating, shuffleFish, fishWithImages.length]);
-  
-  // Get the featured fish based on random indices
-  const featuredFish = useMemo(() => {
-    return randomFishIndices
-      .map(index => fishWithImages[index])
-      .filter(Boolean);
-  }, [randomFishIndices, fishWithImages]);
-
-  // Dynamic images from spreadsheet with fallbacks
-  const images = useMemo(() => ({
-    hero: homepageImages?.["loja"] || heroImageFallback,
-    fish: homepageImages?.["peixes"] || fishBettaFallback,
-    plants: homepageImages?.["plantas"] || plantsImageFallback,
-    food: homepageImages?.["comidas"] || foodImageFallback,
-    equipment: homepageImages?.["filtros"] || equipmentImageFallback,
-    waterCare: homepageImages?.["condicionadores"] || waterCareImageFallback,
-    substrate: homepageImages?.["substratos"] || substrateImageFallback,
-    aquaticWorld: homepageImages?.["mundo aquático"] || plantsImageFallback,
-  }), [homepageImages]);
+  // Get first 3 fish as featured
+  const featuredFish = fishData?.slice(0, 3) || [];
 
   const categories = [
-    { icon: Fish, title: "Peixes", description: "Espécies tropicais e de água fria", href: "/peixes", image: images.fish },
-    { icon: Leaf, title: "Plantas", description: "Plantas aquáticas naturais", href: "/plantas", image: images.plants },
-    { icon: UtensilsCrossed, title: "Alimentação", description: "Flocos, pellets e congelados", href: "/alimentacao", image: images.food },
-    { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: images.waterCare },
-    { icon: Zap, title: "Equipamentos", description: "Iluminação e filtragem", href: "/equipamentos", image: images.equipment },
-    { icon: Layers, title: "Substratos", description: "Férteis e inertes", href: "/substratos", image: images.substrate },
+    { icon: Fish, title: "Peixes", description: "Espécies tropicais e de água fria", href: "/peixes", image: fishBetta },
+    { icon: Leaf, title: "Plantas", description: "Plantas aquáticas naturais", href: "/plantas", image: plantsImage },
+    { icon: UtensilsCrossed, title: "Alimentação", description: "Flocos, pellets e congelados", href: "/alimentacao", image: foodImage },
+    { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: waterCareImage },
+    { icon: Zap, title: "Equipamentos", description: "Iluminação e filtragem", href: "/equipamentos", image: equipmentImage },
+    { icon: Layers, title: "Substratos", description: "Férteis e inertes", href: "/substratos", image: substrateImage },
   ];
 
   return (
@@ -93,10 +35,9 @@ const Index = () => {
         {/* Background Image with subtle overlay */}
         <div className="absolute inset-0">
           <img
-            src={images.hero}
+            src={heroImage}
             alt="Aquário tropical"
-            className="w-full h-full object-cover transition-opacity duration-500"
-            style={{ opacity: isImagesLoading ? 0.5 : 1 }}
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
         </div>
@@ -172,7 +113,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Fish Section - Dynamic with Random Selection */}
+      {/* Featured Fish Section - Dynamic from Google Sheets */}
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
@@ -181,29 +122,15 @@ const Index = () => {
                 Peixes em Destaque
               </h2>
               <p className="font-body text-muted-foreground max-w-xl text-lg">
-                Descobre as espécies mais populares - atualiza automaticamente!
+                As espécies mais procuradas pelos nossos clientes
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  setIsRotating(!isRotating);
-                  if (!isRotating) shuffleFish();
-                }}
-                className={`rounded-full ${isRotating ? 'text-primary' : 'text-muted-foreground'}`}
-                title={isRotating ? "Pausar rotação" : "Retomar rotação"}
-              >
-                <RefreshCw className={`w-5 h-5 ${isRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '3s' }} />
-              </Button>
-              <Button asChild variant="outline" className="rounded-full">
-                <Link to="/peixes">
-                  Ver Todos
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
-            </div>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/peixes">
+                Ver Todos
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -213,22 +140,6 @@ const Index = () => {
               ))
             ) : featuredFish.length > 0 ? (
               featuredFish.map((fish, index) => (
-                <div 
-                  key={`${fish.name}-${randomFishIndices[index]}`} 
-                  className="animate-fade-in" 
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <ProductCard 
-                    image={fish.image}
-                    name={fish.name}
-                    price={fish.price}
-                    showAddToCart
-                  />
-                </div>
-              ))
-            ) : fishData && fishData.length > 0 ? (
-              // Fallback to first 3 fish if no images available
-              fishData.slice(0, 3).map((fish, index) => (
                 <div key={`${fish.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                   <ProductCard 
                     image={fish.image}
@@ -253,8 +164,8 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <img
-                src={images.aquaticWorld}
-                alt="Mundo Aquático"
+                src={plantsImage}
+                alt="Plantas aquáticas"
                 className="rounded-3xl shadow-card w-full"
               />
             </div>
@@ -304,7 +215,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 gap-8">
             <Link to="/alimentacao" className="group relative h-72 rounded-3xl overflow-hidden shadow-card">
-              <img src={images.food} alt="Alimentação" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+              <img src={foodImage} alt="Alimentação" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
               <div className="absolute bottom-8 left-8">
                 <h3 className="font-heading text-2xl font-semibold text-primary-foreground mb-2 tracking-tight">Alimentação</h3>
@@ -312,7 +223,7 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/equipamentos" className="group relative h-72 rounded-3xl overflow-hidden shadow-card">
-              <img src={images.equipment} alt="Equipamentos" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+              <img src={equipmentImage} alt="Equipamentos" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
               <div className="absolute bottom-8 left-8">
                 <h3 className="font-heading text-2xl font-semibold text-primary-foreground mb-2 tracking-tight">Equipamentos</h3>

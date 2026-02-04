@@ -4,26 +4,41 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
 import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGoogleSheet } from "@/hooks/useGoogleSheet";
-import heroImage from "@/assets/hero-aquarium.jpg";
-import fishBetta from "@/assets/fish-betta.jpg";
-import plantsImage from "@/assets/plants.jpg";
-import foodImage from "@/assets/food.jpg";
-import equipmentImage from "@/assets/equipment.jpg";
-import waterCareImage from "@/assets/water-care.jpg";
-import substrateImage from "@/assets/substrate.jpg";
+import { useHomepageImages } from "@/hooks/useHomepageImages";
+
+// Fallback images (used while loading or if sheet fails)
+import heroImageFallback from "@/assets/hero-aquarium.jpg";
+import fishBettaFallback from "@/assets/fish-betta.jpg";
+import plantsImageFallback from "@/assets/plants.jpg";
+import foodImageFallback from "@/assets/food.jpg";
+import equipmentImageFallback from "@/assets/equipment.jpg";
+import waterCareImageFallback from "@/assets/water-care.jpg";
+import substrateImageFallback from "@/assets/substrate.jpg";
 
 const Index = () => {
   const { data: fishData, isLoading: isFishLoading } = useGoogleSheet("peixes");
+  const { data: homepageImages, isLoading: isImagesLoading } = useHomepageImages();
   
   // Get first 3 fish as featured
   const featuredFish = fishData?.slice(0, 3) || [];
 
+  // Use dynamic images with fallbacks
+  const heroImage = homepageImages?.hero || heroImageFallback;
+  const fishImage = homepageImages?.fish || fishBettaFallback;
+  const plantsImage = homepageImages?.plants || plantsImageFallback;
+  const foodImage = homepageImages?.food || foodImageFallback;
+  const equipmentImage = homepageImages?.equipment || equipmentImageFallback;
+  const conditionersImage = homepageImages?.conditioners || waterCareImageFallback;
+  const substrateImage = homepageImages?.substrates || substrateImageFallback;
+  const aboutImage = homepageImages?.about || plantsImageFallback;
+
   const categories = [
-    { icon: Fish, title: "Peixes", description: "Espécies tropicais e de água fria", href: "/peixes", image: fishBetta },
+    { icon: Fish, title: "Peixes", description: "Espécies tropicais e de água fria", href: "/peixes", image: fishImage },
     { icon: Leaf, title: "Plantas", description: "Plantas aquáticas naturais", href: "/plantas", image: plantsImage },
     { icon: UtensilsCrossed, title: "Alimentação", description: "Flocos, pellets e congelados", href: "/alimentacao", image: foodImage },
-    { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: waterCareImage },
+    { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: conditionersImage },
     { icon: Zap, title: "Equipamentos", description: "Iluminação e filtragem", href: "/equipamentos", image: equipmentImage },
     { icon: Layers, title: "Substratos", description: "Férteis e inertes", href: "/substratos", image: substrateImage },
   ];
@@ -34,11 +49,15 @@ const Index = () => {
       <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-background">
         {/* Background Image with subtle overlay */}
         <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt="Aquário tropical"
-            className="w-full h-full object-cover"
-          />
+          {isImagesLoading ? (
+            <Skeleton className="w-full h-full" />
+          ) : (
+            <img
+              src={heroImage}
+              alt="Aquário tropical"
+              className="w-full h-full object-cover"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
         </div>
 
@@ -90,11 +109,15 @@ const Index = () => {
                 className="group relative h-64 rounded-2xl overflow-hidden shadow-card hover:shadow-glow transition-smooth animate-fade-in"
                 style={{ animationDelay: `${index * 0.08}s` }}
               >
-                <img 
-                  src={category.image} 
-                  alt={category.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" 
-                />
+                {isImagesLoading ? (
+                  <Skeleton className="w-full h-full" />
+                ) : (
+                  <img 
+                    src={category.image} 
+                    alt={category.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" 
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="flex items-center gap-3 mb-2">
@@ -163,11 +186,15 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <img
-                src={plantsImage}
-                alt="Plantas aquáticas"
-                className="rounded-3xl shadow-card w-full"
-              />
+              {isImagesLoading ? (
+                <Skeleton className="rounded-3xl w-full h-80" />
+              ) : (
+                <img
+                  src={aboutImage}
+                  alt="Mundo aquático"
+                  className="rounded-3xl shadow-card w-full"
+                />
+              )}
             </div>
             <div>
               <span className="inline-block px-4 py-2 bg-secondary text-secondary-foreground rounded-full text-sm font-medium mb-8">
@@ -215,7 +242,11 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 gap-8">
             <Link to="/alimentacao" className="group relative h-72 rounded-3xl overflow-hidden shadow-card">
-              <img src={foodImage} alt="Alimentação" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+              {isImagesLoading ? (
+                <Skeleton className="w-full h-full" />
+              ) : (
+                <img src={foodImage} alt="Alimentação" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
               <div className="absolute bottom-8 left-8">
                 <h3 className="font-heading text-2xl font-semibold text-primary-foreground mb-2 tracking-tight">Alimentação</h3>
@@ -223,7 +254,11 @@ const Index = () => {
               </div>
             </Link>
             <Link to="/equipamentos" className="group relative h-72 rounded-3xl overflow-hidden shadow-card">
-              <img src={equipmentImage} alt="Equipamentos" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+              {isImagesLoading ? (
+                <Skeleton className="w-full h-full" />
+              ) : (
+                <img src={equipmentImage} alt="Equipamentos" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
               <div className="absolute bottom-8 left-8">
                 <h3 className="font-heading text-2xl font-semibold text-primary-foreground mb-2 tracking-tight">Equipamentos</h3>

@@ -115,7 +115,7 @@ const Footer = () => {
               </a>
               <div className="flex items-start gap-3 text-primary-foreground/80">
                 <MapPin className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
-                <span>Rua das Águas Claras, 123<br />4000-001 Porto, Portugal</span>
+                <span>Largo do Souto<br />5000-747 Torgueda-Vila Real, Portugal</span>
               </div>
             </div>
 

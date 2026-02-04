@@ -19,6 +19,59 @@ const SHEET_NAMES: Record<string, string> = {
   "condicionadores\\fertilizantes": "condicionadores\\fertilizantes",
   "filtragem e iluminação": "filtragem e iluminação",
   substratos: "substratos",
+  "fotos-homepage": "Fotos Página Inicial",
+};
+
+export interface HomepageImage {
+  label: string;
+  url: string;
+}
+
+// Fetch homepage images with label mapping
+export const fetchHomepageImages = async (): Promise<Record<string, string>> => {
+  const sheetName = SHEET_NAMES["fotos-homepage"];
+  const timestamp = Date.now();
+  const encodedSheetName = encodeURIComponent(sheetName);
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodedSheetName}&_t=${timestamp}`;
+  
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+    },
+  });
+  
+  if (!response.ok) {
+    console.error(`Failed to fetch homepage images: ${response.status}`);
+    return {};
+  }
+  
+  const csvText = await response.text();
+  const rows = parseCSV(csvText);
+  
+  // Map: label -> image URL (skip header if exists)
+  const imageMap: Record<string, string> = {};
+  for (const row of rows) {
+    const [imageUrl, label] = row;
+    if (label && imageUrl) {
+      const cleanLabel = label.trim().toLowerCase();
+      imageMap[cleanLabel] = convertDriveLink(imageUrl.trim());
+    }
+  }
+  
+  console.log("Homepage images loaded:", Object.keys(imageMap));
+  return imageMap;
+};
+
+export const useHomepageImages = () => {
+  return useQuery({
+    queryKey: ["homepage-images"],
+    queryFn: fetchHomepageImages,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: true,
+  });
 };
 
 // Convert Google Drive share links to thumbnail URLs

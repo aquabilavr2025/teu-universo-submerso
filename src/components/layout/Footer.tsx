@@ -19,9 +19,9 @@ const Footer = () => {
     setFormData({ name: "", email: "", message: "" });
   };
 
-  const whatsappLink = "https://wa.me/351912345678";
-  const instagramLink = "https://instagram.com";
-  const facebookLink = "https://facebook.com";
+  const whatsappLink = "https://wa.me/351938589917";
+  const instagramLink = "https://www.instagram.com/aquabila_vr/";
+  const facebookLink = "https://www.facebook.com/profile.php?id=61587249702662";
 
   return (
     <footer className="bg-ocean-deep text-primary-foreground">
@@ -98,24 +98,22 @@ const Footer = () => {
             <h3 className="font-heading text-xl font-semibold">Contactos</h3>
             <div className="space-y-4">
               <a
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="tel:+351938589917"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
               >
                 <Phone className="w-5 h-5 text-teal" />
-                <span>+351 912 345 678</span>
+                <span>+351 938 589 917</span>
               </a>
               <a
-                href="mailto:info@universosubmerso.pt"
+                href="mailto:aquabilavr2025@gmail.com"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
               >
                 <Mail className="w-5 h-5 text-teal" />
-                <span>info@universosubmerso.pt</span>
+                <span>aquabilavr2025@gmail.com</span>
               </a>
               <div className="flex items-start gap-3 text-primary-foreground/80">
                 <MapPin className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
-                <span>Rua das Águas Claras, 123<br />4000-001 Porto, Portugal</span>
+                <span>Largo do Souto<br />5000-747 Torgueda-Vila Real</span>
               </div>
             </div>
 

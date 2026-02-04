@@ -38,7 +38,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const cart = useCart();
 
-  const whatsappNumber = "351912345678"; // Replace with actual number
+  const whatsappNumber = "351938589917";
   const whatsappMessage = encodeURIComponent(
     `Olá! Gostaria de encomendar: ${name} - Preço: ${price}`
   );

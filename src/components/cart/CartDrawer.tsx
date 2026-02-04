@@ -24,7 +24,7 @@ const CartDrawer = () => {
     setIsOpen,
   } = useCart();
 
-  const whatsappNumber = "351912345678"; // Replace with actual number
+  const whatsappNumber = "351938589917";
 
   const generateWhatsAppMessage = () => {
     if (items.length === 0) return "";

@@ -19,9 +19,9 @@ const Footer = () => {
     setFormData({ name: "", email: "", message: "" });
   };
 
-  const whatsappLink = "https://wa.me/351912345678";
-  const instagramLink = "https://instagram.com";
-  const facebookLink = "https://facebook.com";
+  const whatsappLink = "https://wa.me/351938589917";
+  const instagramLink = "https://www.instagram.com/aquabila_vr/";
+  const facebookLink = "https://www.facebook.com/profile.php?id=61587249702662";
 
   return (
     <footer className="bg-ocean-deep text-primary-foreground">

@@ -104,10 +104,10 @@ const Footer = () => {
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
               >
                 <Phone className="w-5 h-5 text-teal" />
-                <span>+351 912 345 678</span>
+                <span>+351 938 589 917</span>
               </a>
               <a
-                href="mailto:info@universosubmerso.pt"
+                href="mailto:aquabilavr2025@gmail.com"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
               >
                 <Mail className="w-5 h-5 text-teal" />

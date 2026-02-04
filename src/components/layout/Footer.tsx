@@ -111,7 +111,7 @@ const Footer = () => {
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
               >
                 <Mail className="w-5 h-5 text-teal" />
-                <span>info@universosubmerso.pt</span>
+                <span>aquabilavr2025@gmail.com</span>
               </a>
               <div className="flex items-start gap-3 text-primary-foreground/80">
                 <MapPin className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />

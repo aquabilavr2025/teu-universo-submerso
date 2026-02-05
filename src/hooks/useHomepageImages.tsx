@@ -6,7 +6,7 @@ export interface HomepageImage {
 }
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
-const SHEET_NAME = "Fotos Página Online";
+const SHEET_NAME = "Fotos Página Inicial";
 
 // Convert Google Drive share links to thumbnail URLs
 const convertDriveLink = (driveLink: string): string => {

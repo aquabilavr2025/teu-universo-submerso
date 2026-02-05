@@ -125,10 +125,10 @@ const fetchHomepageImages = async (): Promise<Record<ImageKey, string>> => {
     about: "",
   };
   
-  // Skip header row and process data
-  // Expected format: [Image URL], [Label]
-  for (const row of rows.slice(1)) {
-    const [imageUrl, label] = row;
+  // Process all rows (no header row in this sheet)
+  // Actual format: [Label], [Image URL], [Description]
+  for (const row of rows) {
+    const [label, imageUrl] = row;
     
     if (!label || !imageUrl) continue;
     

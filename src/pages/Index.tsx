@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Fish, Leaf, Droplets, Zap, UtensilsCrossed, Layers } from "lucide-react";
+import { ArrowRight, Fish, Leaf, Droplets, Zap, UtensilsCrossed, Layers, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import ProductCard from "@/components/ui/ProductCard";
@@ -41,6 +41,7 @@ const Index = () => {
     { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: conditionersImage },
     { icon: Zap, title: "Equipamentos", description: "Iluminação e filtragem", href: "/equipamentos", image: equipmentImage },
     { icon: Layers, title: "Substratos", description: "Férteis e inertes", href: "/substratos", image: substrateImage },
+    { icon: FlaskConical, title: "Testes & Medicamentos", description: "Kits de teste e tratamentos", href: "/testes-medicamentos", image: conditionersImage },
   ];
 
   return (

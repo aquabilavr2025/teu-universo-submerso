@@ -7,12 +7,12 @@ import { AlertCircle, RefreshCw, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const TestesMedicamentos = () => {
-  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("Testes / Medicamentos");
+  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("Testes/Medicamentos");
 
   return (
     <Layout>
       <PageHero
-        title="Testes & Medicamentos"
+        title="Testes/Medicamentos"
         subtitle="Monitoriza a qualidade da água e cuida da saúde dos teus peixes com os nossos kits de teste e medicamentos especializados."
       />
 

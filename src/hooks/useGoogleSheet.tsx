@@ -19,7 +19,7 @@ const SHEET_NAMES: Record<string, string> = {
   "condicionadores\\fertilizantes": "condicionadores\\fertilizantes",
   "filtragem e iluminação": "filtragem e iluminação",
   substratos: "substratos",
-  "Testes / Medicamentos": "Testes / Medicamentos",
+  "Testes/Medicamentos": "Testes/Medicamentos",
 };
 
 // Convert Google Drive share links to thumbnail URLs

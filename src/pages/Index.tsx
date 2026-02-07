@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Fish, Leaf, Droplets, Zap, UtensilsCrossed, Layers, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
-import ProductCard from "@/components/ui/ProductCard";
-import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import FeaturedFishCarousel from "@/components/home/FeaturedFishCarousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGoogleSheet } from "@/hooks/useGoogleSheet";
 import { useHomepageImages } from "@/hooks/useHomepageImages";
@@ -20,9 +19,6 @@ import substrateImageFallback from "@/assets/substrate.jpg";
 const Index = () => {
   const { data: fishData, isLoading: isFishLoading } = useGoogleSheet("peixes");
   const { data: homepageImages, isLoading: isImagesLoading } = useHomepageImages();
-  
-  // Get first 3 fish as featured
-  const featuredFish = fishData?.slice(0, 3) || [];
 
   // Use dynamic images with fallbacks
   const heroImage = homepageImages?.hero || heroImageFallback;
@@ -41,7 +37,7 @@ const Index = () => {
     { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: conditionersImage },
     { icon: Zap, title: "Equipamentos", description: "Iluminação e filtragem", href: "/equipamentos", image: equipmentImage },
     { icon: Layers, title: "Substratos", description: "Férteis e inertes", href: "/substratos", image: substrateImage },
-    { icon: FlaskConical, title: "Testes & Medicamentos", description: "Kits de teste e tratamentos", href: "/testes-medicamentos", image: conditionersImage },
+    { icon: FlaskConical, title: "Testes/Medicamentos", description: "Kits de teste e tratamentos", href: "/testes-medicamentos", image: conditionersImage },
   ];
 
   return (
@@ -157,28 +153,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {isFishLoading ? (
-              Array.from({ length: 3 }).map((_, index) => (
-                <ProductCardSkeleton key={index} />
-              ))
-            ) : featuredFish.length > 0 ? (
-              featuredFish.map((fish, index) => (
-                <div key={`${fish.name}-${index}`} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <ProductCard 
-                    image={fish.image}
-                    name={fish.name}
-                    price={fish.price}
-                    showAddToCart
-                  />
-                </div>
-              ))
-            ) : (
-              <p className="col-span-3 text-center text-muted-foreground">
-                Peixes em destaque a carregar...
-              </p>
-            )}
-          </div>
+          <FeaturedFishCarousel fish={fishData || []} isLoading={isFishLoading} />
         </div>
       </section>
 

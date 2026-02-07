@@ -104,11 +104,25 @@ const formatPrice = (price: string): string => {
   return `${cleanPrice}€`;
 };
 
+// Detect if the first row looks like a header row
+const isHeaderRow = (row: string[]): boolean => {
+  const headerKeywords = [
+    "imagem", "image", "foto", "photo", "link",
+    "nome", "name", "produto", "product",
+    "preço", "preco", "price", "valor",
+    "quantidade", "quantity", "stock",
+    "descrição", "description",
+  ];
+  return row.some((cell) => {
+    const lower = cell.trim().toLowerCase();
+    return headerKeywords.some((keyword) => lower === keyword || lower.includes(keyword));
+  });
+};
+
 const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
   const sheetName = SHEET_NAMES[tabName] || tabName;
   const timestamp = Date.now();
   
-  // Use sheet name directly in the URL with proper encoding
   const encodedSheetName = encodeURIComponent(sheetName);
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodedSheetName}&_t=${timestamp}`;
   
@@ -132,9 +146,10 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
   
   const rows = parseCSV(csvText);
   
-  // Skip header row (first row) and map data
-  // Spreadsheet format: [Image URL], [Name], [Price]
-  const items: ProductItem[] = rows.slice(1).map((row) => {
+  // Smart header detection: only skip first row if it looks like a header
+  const dataRows = rows.length > 0 && isHeaderRow(rows[0]) ? rows.slice(1) : rows;
+  
+  const items: ProductItem[] = dataRows.map((row) => {
     const [imageLink, name, priceStr] = row;
     
     return {
@@ -144,7 +159,7 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
     };
   }).filter(item => item.name && item.name.length > 0);
   
-  console.log(`Parsed ${items.length} items from ${sheetName}`);
+  console.log(`Parsed ${items.length} items from ${sheetName} (header detected: ${rows.length > 0 && isHeaderRow(rows[0])})`);
   
   return items;
 };

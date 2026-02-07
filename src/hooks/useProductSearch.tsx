@@ -122,7 +122,15 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
       const csvText = await response.text();
       const rows = parseCSV(csvText);
       
-      return rows.slice(1).map((row, index) => {
+      // Smart header detection: only skip first row if it looks like a header
+      const headerKeywords = ["imagem", "image", "foto", "nome", "name", "preço", "preco", "price", "produto", "product"];
+      const hasHeader = rows.length > 0 && rows[0].some(cell => {
+        const lower = cell.trim().toLowerCase();
+        return headerKeywords.some(kw => lower === kw || lower.includes(kw));
+      });
+      const dataRows = hasHeader ? rows.slice(1) : rows;
+      
+      return dataRows.map((row, index) => {
         const [imageLink, name, priceStr] = row;
         const formattedPrice = formatPrice(priceStr?.trim() || "0");
         

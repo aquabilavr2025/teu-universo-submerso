@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Fish, ShoppingCart } from "lucide-react";
+import { Menu, X, Fish, ShoppingCart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { SearchTrigger, SearchBar } from "@/components/search/SearchTrigger";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const navLinks = [
-  { href: "/", label: "Início" },
+const categoryLinks = [
   { href: "/peixes", label: "Peixes" },
   { href: "/plantas", label: "Plantas" },
   { href: "/alimentacao", label: "Alimentação" },
@@ -41,19 +46,46 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`px-4 py-2 rounded-lg font-body text-sm transition-smooth ${
-                  location.pathname === link.href
-                    ? "bg-primary text-primary-foreground shadow-soft"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <Link
+              to="/"
+              className={`px-4 py-2 rounded-lg font-body text-sm transition-smooth ${
+                location.pathname === "/"
+                  ? "bg-primary text-primary-foreground shadow-soft"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              }`}
+            >
+              Início
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`px-4 py-2 rounded-lg font-body text-sm transition-smooth inline-flex items-center gap-1 ${
+                    categoryLinks.some((l) => location.pathname === l.href)
+                      ? "bg-primary text-primary-foreground shadow-soft"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  Categorias
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-56 bg-popover">
+                {categoryLinks.map((link) => (
+                  <DropdownMenuItem key={link.href} asChild>
+                    <Link
+                      to={link.href}
+                      className={`w-full cursor-pointer ${
+                        location.pathname === link.href
+                          ? "bg-accent font-medium"
+                          : ""
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Search, Cart and Mobile Menu */}
@@ -95,7 +127,18 @@ const Navbar = () => {
         {isOpen && (
           <div className="lg:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-2">
-              {navLinks.map((link) => (
+              <Link
+                to="/"
+                onClick={() => setIsOpen(false)}
+                className={`px-4 py-3 rounded-lg font-body text-sm transition-smooth ${
+                  location.pathname === "/"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                Início
+              </Link>
+              {categoryLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}

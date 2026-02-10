@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Fish, ShoppingCart } from "lucide-react";
+import { Menu, X, Fish, ShoppingCart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { SearchTrigger, SearchBar } from "@/components/search/SearchTrigger";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const navLinks = [
-  { href: "/", label: "Início" },
+const categoryLinks = [
   { href: "/peixes", label: "Peixes" },
   { href: "/plantas", label: "Plantas" },
   { href: "/alimentacao", label: "Alimentação" },

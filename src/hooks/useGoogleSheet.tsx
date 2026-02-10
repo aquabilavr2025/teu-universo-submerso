@@ -20,7 +20,7 @@ const SHEET_NAMES: Record<string, string> = {
   "filtragem e iluminação": "filtragem e iluminação",
   substratos: "substratos",
   "Testes/Medicamentos": "Testes/Medicamentos",
-  "Aquário/Móveis": "Aquário/Móveis",
+  "Aquários": "Aquários",
   "Aquecimento": "Aquecimento",
 };
 

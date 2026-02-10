@@ -14,7 +14,7 @@ const CATEGORIES = [
   { key: "filtragem e iluminação", label: "Equipamentos", path: "/equipamentos" },
   { key: "substratos", label: "Substratos", path: "/substratos" },
   { key: "Testes/Medicamentos", label: "Testes/Medicamentos", path: "/testes-medicamentos" },
-  { key: "Aquário/Móveis", label: "Aquários", path: "/aquarios" },
+  { key: "Aquários", label: "Aquários", path: "/aquarios" },
   { key: "Aquecimento", label: "Aquecimento", path: "/aquecimento" },
 ];
 

@@ -1,14 +1,13 @@
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { useCart } from "@/contexts/CartContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -47,35 +46,28 @@ const CartDrawer = () => {
   };
 
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerContent className="max-h-[85vh]">
-        <DrawerHeader className="border-b border-border/50">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <ShoppingCart className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <DrawerTitle className="font-heading text-xl">
-                  Carrinho
-                </DrawerTitle>
-                <DrawerDescription className="text-sm">
-                  {totalItems === 0
-                    ? "O seu carrinho está vazio"
-                    : `${totalItems} ${totalItems === 1 ? "item" : "itens"}`}
-                </DrawerDescription>
-              </div>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetContent side="right" className="flex flex-col p-0 w-full sm:max-w-md">
+        <SheetHeader className="px-6 py-5 border-b border-border/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <ShoppingCart className="w-5 h-5 text-primary" />
             </div>
-            <DrawerClose asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <X className="w-5 h-5" />
-              </Button>
-            </DrawerClose>
+            <div>
+              <SheetTitle className="font-heading text-xl">
+                Carrinho
+              </SheetTitle>
+              <SheetDescription className="text-sm">
+                {totalItems === 0
+                  ? "O seu carrinho está vazio"
+                  : `${totalItems} ${totalItems === 1 ? "item" : "itens"}`}
+              </SheetDescription>
+            </div>
           </div>
-        </DrawerHeader>
+        </SheetHeader>
 
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4">
+          <div className="flex flex-col items-center justify-center flex-1 py-16 px-6">
             <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
               <ShoppingCart className="w-10 h-10 text-muted-foreground" />
             </div>
@@ -85,7 +77,7 @@ const CartDrawer = () => {
           </div>
         ) : (
           <>
-            <ScrollArea className="flex-1 px-4 py-4 max-h-[45vh]">
+            <ScrollArea className="flex-1 px-6 py-4">
               <div className="space-y-4">
                 {items.map((item) => (
                   <div
@@ -143,7 +135,7 @@ const CartDrawer = () => {
               </div>
             </ScrollArea>
 
-            <DrawerFooter className="border-t border-border/50 pt-4">
+            <div className="border-t border-border/50 px-6 py-4 mt-auto">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-muted-foreground">Total</span>
                 <span className="text-2xl font-bold text-foreground">
@@ -160,15 +152,15 @@ const CartDrawer = () => {
               <Button
                 variant="ghost"
                 onClick={clearCart}
-                className="w-full text-muted-foreground hover:text-destructive"
+                className="w-full text-muted-foreground hover:text-destructive mt-2"
               >
                 Limpar Carrinho
               </Button>
-            </DrawerFooter>
+            </div>
           </>
         )}
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 };
 

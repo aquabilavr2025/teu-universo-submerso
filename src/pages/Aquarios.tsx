@@ -7,7 +7,7 @@ import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Aquarios = () => {
-  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("Aquário/Móveis");
+  const { data: inventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("Aquários");
 
   return (
     <Layout>

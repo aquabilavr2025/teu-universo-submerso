@@ -20,6 +20,8 @@ const SHEET_NAMES: Record<string, string> = {
   "filtragem e iluminação": "filtragem e iluminação",
   substratos: "substratos",
   "Testes/Medicamentos": "Testes/Medicamentos",
+  "Aquário/Móveis": "Aquário/Móveis",
+  "Aquecimento": "Aquecimento",
 };
 
 // Convert Google Drive share links to thumbnail URLs

@@ -15,6 +15,8 @@ const navLinks = [
   { href: "/equipamentos", label: "Equipamentos" },
   { href: "/substratos", label: "Substratos" },
   { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
+  { href: "/aquarios", label: "Aquários" },
+  { href: "/aquecimento", label: "Aquecimento" },
 ];
 
 const Navbar = () => {

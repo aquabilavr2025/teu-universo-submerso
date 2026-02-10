@@ -127,7 +127,18 @@ const Navbar = () => {
         {isOpen && (
           <div className="lg:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-2">
-              {navLinks.map((link) => (
+              <Link
+                to="/"
+                onClick={() => setIsOpen(false)}
+                className={`px-4 py-3 rounded-lg font-body text-sm transition-smooth ${
+                  location.pathname === "/"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                Início
+              </Link>
+              {categoryLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}

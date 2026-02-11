@@ -57,6 +57,8 @@ const Peixes = () => {
                     image={fish.image}
                     name={fish.name}
                     price={fish.price}
+                    description={fish.description}
+                    stock={fish.stock}
                     showAddToCart
                   />
                 </div>

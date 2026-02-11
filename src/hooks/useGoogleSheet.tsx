@@ -4,6 +4,8 @@ export interface ProductItem {
   image: string;
   name: string;
   price: string;
+  description: string;
+  stock: number | null;
 }
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
@@ -90,6 +92,17 @@ const parseCSV = (csv: string): string[][] => {
   return rows;
 };
 
+// Sanitize text: strip HTML tags, encoding artifacts, and unwanted special characters
+const sanitizeText = (text: string): string => {
+  if (!text) return "";
+  return text
+    .replace(/<[^>]*>/g, "") // Remove HTML tags
+    .replace(/&[a-zA-Z]+;/g, " ") // Remove HTML entities
+    .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "") // Remove zero-width and non-breaking spaces
+    .replace(/\s+/g, " ") // Normalize whitespace
+    .trim();
+};
+
 // Format price to ensure Euro format
 const formatPrice = (price: string): string => {
   if (!price) return "0€";
@@ -152,12 +165,16 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
   const dataRows = rows.length > 0 && isHeaderRow(rows[0]) ? rows.slice(1) : rows;
   
   const items: ProductItem[] = dataRows.map((row) => {
-    const [imageLink, name, priceStr] = row;
+    const [imageLink, name, priceStr, description, stockStr] = row;
+    
+    const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
     
     return {
       image: convertDriveLink(imageLink?.trim() || ""),
-      name: name?.trim() || "",
+      name: sanitizeText(name?.trim() || ""),
       price: formatPrice(priceStr?.trim() || "0"),
+      description: sanitizeText(description?.trim() || ""),
+      stock: isNaN(stockVal as number) ? null : stockVal,
     };
   }).filter(item => item.name && item.name.length > 0);
   

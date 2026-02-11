@@ -92,6 +92,17 @@ const parseCSV = (csv: string): string[][] => {
   return rows;
 };
 
+// Sanitize text: strip HTML tags, encoding artifacts, and unwanted special characters
+const sanitizeText = (text: string): string => {
+  if (!text) return "";
+  return text
+    .replace(/<[^>]*>/g, "") // Remove HTML tags
+    .replace(/&[a-zA-Z]+;/g, " ") // Remove HTML entities
+    .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "") // Remove zero-width and non-breaking spaces
+    .replace(/\s+/g, " ") // Normalize whitespace
+    .trim();
+};
+
 // Format price to ensure Euro format
 const formatPrice = (price: string): string => {
   if (!price) return "0€";

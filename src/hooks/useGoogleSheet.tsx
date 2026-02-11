@@ -4,6 +4,8 @@ export interface ProductItem {
   image: string;
   name: string;
   price: string;
+  description: string;
+  stock: number | null;
 }
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";

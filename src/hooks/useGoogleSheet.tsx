@@ -154,12 +154,16 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
   const dataRows = rows.length > 0 && isHeaderRow(rows[0]) ? rows.slice(1) : rows;
   
   const items: ProductItem[] = dataRows.map((row) => {
-    const [imageLink, name, priceStr] = row;
+    const [imageLink, name, priceStr, description, stockStr] = row;
+    
+    const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
     
     return {
       image: convertDriveLink(imageLink?.trim() || ""),
-      name: name?.trim() || "",
+      name: sanitizeText(name?.trim() || ""),
       price: formatPrice(priceStr?.trim() || "0"),
+      description: sanitizeText(description?.trim() || ""),
+      stock: isNaN(stockVal as number) ? null : stockVal,
     };
   }).filter(item => item.name && item.name.length > 0);
   

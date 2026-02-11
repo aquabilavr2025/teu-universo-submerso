@@ -133,15 +133,18 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
       const dataRows = hasHeader ? rows.slice(1) : rows;
       
       return dataRows.map((row, index) => {
-        const [imageLink, name, priceStr] = row;
+        const [imageLink, name, priceStr, description, stockStr] = row;
         const formattedPrice = formatPrice(priceStr?.trim() || "0");
+        const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
         
         return {
           id: `${category.key}-${index}`,
           image: convertDriveLink(imageLink?.trim() || ""),
-          name: name?.trim() || "",
+          name: sanitizeText(name?.trim() || ""),
           price: formattedPrice,
           priceValue: extractPriceValue(formattedPrice),
+          description: sanitizeText(description?.trim() || ""),
+          stock: isNaN(stockVal as number) ? null : stockVal,
           category: category.label,
           categoryPath: category.path,
         };

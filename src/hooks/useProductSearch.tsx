@@ -87,6 +87,17 @@ const parseCSV = (csv: string): string[][] => {
   return rows;
 };
 
+// Sanitize text
+const sanitizeText = (text: string): string => {
+  if (!text) return "";
+  return text
+    .replace(/<[^>]*>/g, "")
+    .replace(/&[a-zA-Z]+;/g, " ")
+    .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 // Extract numeric price value
 const extractPriceValue = (price: string): number => {
   const cleanPrice = price.replace(/[€$,\s]/g, "").replace(",", ".");

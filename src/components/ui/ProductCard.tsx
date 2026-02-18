@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { ShoppingCart, MessageCircle, Package } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
-import ProductDetailModal from "@/components/ui/ProductDetailModal";
 
 interface ProductCardProps {
   image: string;
@@ -43,14 +41,21 @@ const ProductCard = ({
   href,
 }: ProductCardProps) => {
   const cart = useCart();
-  const [modalOpen, setModalOpen] = useState(false);
+
+  const buildProductUrl = () => {
+    const params = new URLSearchParams();
+    params.set("nome", name);
+    params.set("preco", price);
+    if (image) params.set("imagem", image);
+    if (description) params.set("descricao", description);
+    if (stock !== null && stock !== undefined) params.set("stock", String(stock));
+    if (category) params.set("categoria", category);
+    if (href) params.set("origem", href);
+    return `/produto?${params.toString()}`;
+  };
 
   const handleCardClick = () => {
-    if (href) {
-      window.open(href, "_blank", "noopener,noreferrer");
-    } else {
-      setModalOpen(true);
-    }
+    window.open(buildProductUrl(), "_blank", "noopener,noreferrer");
   };
 
   const whatsappNumber = "351938589917";
@@ -165,15 +170,6 @@ const ProductCard = ({
           )}
         </CardContent>
       </Card>
-
-      <ProductDetailModal
-        product={{ image, name, price, description: description || "", stock: stock ?? null }}
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        category={category}
-        showAddToCart={showAddToCart}
-        showWhatsAppButton={showWhatsAppButton}
-      />
     </>
   );
 };

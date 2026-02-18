@@ -58,7 +58,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [priceRange, setPriceRange] = useState<[number, number] | null>(null); // null = no price filter active
   const [showFilters, setShowFilters] = useState(false);
   
   const debouncedQuery = useDebounce(query, 200);
@@ -101,10 +101,12 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
       results = results.filter(p => selectedCategories.includes(p.category));
     }
     
-    // Apply price filter
-    results = results.filter(p => 
-      p.priceValue >= priceRange[0] && p.priceValue <= priceRange[1]
-    );
+    // Apply price filter only when explicitly set by user
+    if (priceRange !== null) {
+      results = results.filter(p => 
+        p.priceValue >= priceRange[0] && p.priceValue <= priceRange[1]
+      );
+    }
     
     return results.slice(0, 50); // Show up to 50 results
   }, [debouncedQuery, fuse, products, selectedCategories, priceRange]);
@@ -141,8 +143,8 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   
   const clearFilters = useCallback(() => {
     setSelectedCategories([]);
-    setPriceRange([0, maxPrice]);
-  }, [maxPrice]);
+    setPriceRange(null);
+  }, []);
   
   // Reset on close
   useEffect(() => {
@@ -165,7 +167,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onOpenChange]);
   
-  const hasActiveFilters = selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < maxPrice;
+  const hasActiveFilters = selectedCategories.length > 0 || priceRange !== null;
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -234,11 +236,11 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-medium text-foreground">Preço</span>
                 <span className="text-sm text-muted-foreground">
-                  {priceRange[0]}€ - {priceRange[1]}€
+                  {(priceRange ?? [0, maxPrice])[0]}€ - {(priceRange ?? [0, maxPrice])[1]}€
                 </span>
               </div>
               <Slider
-                value={priceRange}
+                value={priceRange ?? [0, maxPrice]}
                 onValueChange={(value) => setPriceRange(value as [number, number])}
                 min={0}
                 max={maxPrice}

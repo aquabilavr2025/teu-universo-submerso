@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+
 import Fuse from "fuse.js";
 import { Search, X, Filter, Loader2, ShoppingCart } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -53,7 +53,6 @@ const useDebounce = <T,>(value: T, delay: number): T => {
 };
 
 export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
-  const navigate = useNavigate();
   const { data: products = [], isLoading } = useAllProducts();
   const { addItem } = useCart();
   
@@ -74,8 +73,9 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   const fuse = useMemo(() => {
     return new Fuse(products, {
       keys: [
-        { name: "name", weight: 0.7 },
-        { name: "category", weight: 0.3 },
+        { name: "name", weight: 0.6 },
+        { name: "description", weight: 0.25 },
+        { name: "category", weight: 0.15 },
       ],
       threshold: 0.4, // Allows for typos
       distance: 100,
@@ -106,7 +106,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
       p.priceValue >= priceRange[0] && p.priceValue <= priceRange[1]
     );
     
-    return results.slice(0, 20); // Limit results for performance
+    return results.slice(0, 50); // Show up to 50 results
   }, [debouncedQuery, fuse, products, selectedCategories, priceRange]);
   
   // Suggested products when no results
@@ -125,8 +125,8 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   
   const handleProductClick = useCallback((product: SearchableProduct) => {
     onOpenChange(false);
-    navigate(product.categoryPath);
-  }, [navigate, onOpenChange]);
+    window.open(product.categoryPath, "_blank", "noopener,noreferrer");
+  }, [onOpenChange]);
   
   const handleAddToCart = useCallback((product: SearchableProduct, e: React.MouseEvent) => {
     e.stopPropagation();

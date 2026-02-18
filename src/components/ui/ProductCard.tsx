@@ -16,6 +16,7 @@ interface ProductCardProps {
   stock?: number | null;
   showWhatsAppButton?: boolean;
   showAddToCart?: boolean;
+  href?: string; // If provided, clicking the card opens this URL in a new tab
 }
 
 // Parse price string to number (e.g., "2,50€" -> 2.5)
@@ -39,9 +40,18 @@ const ProductCard = ({
   stock,
   showWhatsAppButton = false,
   showAddToCart = false,
+  href,
 }: ProductCardProps) => {
   const cart = useCart();
   const [modalOpen, setModalOpen] = useState(false);
+
+  const handleCardClick = () => {
+    if (href) {
+      window.open(href, "_blank", "noopener,noreferrer");
+    } else {
+      setModalOpen(true);
+    }
+  };
 
   const whatsappNumber = "351938589917";
   const whatsappMessage = encodeURIComponent(
@@ -69,7 +79,7 @@ const ProductCard = ({
     <>
       <Card
         className="group overflow-hidden bg-card border border-border/40 rounded-2xl shadow-card hover:shadow-glow transition-smooth hover:-translate-y-1 h-full flex flex-col cursor-pointer"
-        onClick={() => setModalOpen(true)}
+        onClick={handleCardClick}
       >
         <div className="aspect-[4/3] overflow-hidden bg-muted">
           <img

@@ -127,7 +127,17 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   
   const handleProductClick = useCallback((product: SearchableProduct) => {
     onOpenChange(false);
-    window.open(product.categoryPath, "_blank", "noopener,noreferrer");
+    const params = new URLSearchParams();
+    params.set("nome", product.name);
+    params.set("preco", product.price);
+    params.set("imagem", product.image || "");
+    params.set("descricao", product.description || "");
+    params.set("stock", product.stock !== null && product.stock !== undefined ? String(product.stock) : "");
+    params.set("categoria", product.category || "");
+    params.set("origem", product.categoryPath || "/");
+
+    // Navigate to product page with query params
+    window.location.href = `/produto?${params.toString()}`;
   }, [onOpenChange]);
   
   const handleAddToCart = useCallback((product: SearchableProduct, e: React.MouseEvent) => {

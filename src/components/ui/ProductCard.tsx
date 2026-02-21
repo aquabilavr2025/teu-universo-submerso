@@ -55,7 +55,7 @@ const ProductCard = ({
   };
 
   const handleCardClick = () => {
-    window.open(buildProductUrl(), "_blank", "noopener,noreferrer");
+    window.open(`${window.location.origin}/#${buildProductUrl()}`, "_blank", "noopener,noreferrer");
   };
 
   const whatsappNumber = "351938589917";

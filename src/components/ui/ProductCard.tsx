@@ -2,6 +2,7 @@ import { ShoppingCart, MessageCircle, Package } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -41,6 +42,7 @@ const ProductCard = ({
   href,
 }: ProductCardProps) => {
   const cart = useCart();
+  const navigate = useNavigate();
 
   const buildProductUrl = () => {
     const params = new URLSearchParams();
@@ -55,7 +57,7 @@ const ProductCard = ({
   };
 
   const handleCardClick = () => {
-    window.open(`${window.location.origin}/#${buildProductUrl()}`, "_blank", "noopener,noreferrer");
+    navigate(buildProductUrl());
   };
 
   const whatsappNumber = "351938589917";

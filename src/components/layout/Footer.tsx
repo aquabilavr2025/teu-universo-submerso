@@ -15,7 +15,15 @@ const Footer = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Mensagem enviada com sucesso! Entraremos em contacto em breve.");
+    const to = "aquabilavr2025@gmail.com";
+    const subject = encodeURIComponent(`Mensagem via site de ${formData.name || "Cliente"}`);
+    const body = encodeURIComponent(`Nome: ${formData.name}\nEmail: ${formData.email}\n\nMensagem:\n${formData.message}`);
+    const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
+
+    // Open user's mail client with prefilled message
+    window.location.href = mailto;
+
+    toast.success("Mensagem preparada no seu cliente de email.");
     setFormData({ name: "", email: "", message: "" });
   };
 

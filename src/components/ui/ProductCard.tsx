@@ -88,18 +88,21 @@ const ProductCard = ({
         className="group overflow-hidden bg-card border border-border/40 rounded-2xl shadow-card hover:shadow-glow transition-smooth hover:-translate-y-1 h-full flex flex-col cursor-pointer"
         onClick={handleCardClick}
       >
-        <div className="aspect-[4/3] overflow-hidden bg-muted">
+        <div className="aspect-[4/3] overflow-hidden bg-muted shrink-0">
           <img
             src={image}
             alt={name}
             className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500"
             loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/placeholder.svg";
+            }}
           />
         </div>
-        <CardContent className="p-5 flex flex-col flex-1">
+        <CardContent className="p-5 flex flex-col flex-1 gap-2">
           {/* Category & Stock badges */}
           {(category || displayStock !== undefined) && (
-            <div className="flex items-center gap-2 flex-wrap mb-3">
+            <div className="flex items-center gap-2 flex-wrap">
               {category && (
                 <span className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
                   {category}
@@ -121,15 +124,17 @@ const ProductCard = ({
           )}
 
           {/* Product name */}
-          <h3 className="font-heading text-lg font-semibold text-foreground line-clamp-2 tracking-tight mb-2">
+          <h3 className="font-heading text-lg font-semibold text-foreground line-clamp-2 tracking-tight">
             {name}
           </h3>
 
-          {/* Description */}
+          {/* Description - distinct block, never overlaps image */}
           {description && (
-            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed mb-3">
-              {description}
-            </p>
+            <div className="rounded-lg bg-muted/40 px-3 py-2">
+              <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed whitespace-pre-line">
+                {description}
+              </p>
+            </div>
           )}
 
           {/* Spacer to push price/button to bottom */}

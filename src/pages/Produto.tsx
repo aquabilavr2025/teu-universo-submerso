@@ -114,7 +114,7 @@ const Produto = () => {
                 <h2 className="text-sm font-medium text-muted-foreground mb-2 uppercase tracking-wide">
                   Descrição
                 </h2>
-                <p className="text-foreground leading-relaxed">{description}</p>
+                <p className="text-foreground leading-relaxed whitespace-pre-line">{description}</p>
               </div>
             )}
 

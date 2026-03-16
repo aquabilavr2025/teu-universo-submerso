@@ -97,6 +97,8 @@ const ProductCard = ({
 
   const stockLabel = getStockLabel(displayStock);
   const stockClasses = getStockClasses(displayStock);
+
+  return (
     <>
       <Card
         className="group overflow-hidden bg-card border border-border/40 rounded-2xl shadow-card hover:shadow-glow transition-smooth hover:-translate-y-1 h-full flex flex-col cursor-pointer"

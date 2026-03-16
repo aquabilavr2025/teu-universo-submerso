@@ -82,7 +82,21 @@ const ProductCard = ({
 
   const displayStock = stock ?? quantity;
 
-  return (
+  // Helper to convert numeric stock to status label
+  const getStockLabel = (value: number | null | undefined): string | null => {
+    if (value === null || value === undefined) return null;
+    return value === 1 ? "Em Stock" : "Sob Encomenda";
+  };
+
+  const getStockClasses = (value: number | null | undefined): string => {
+    if (value === null || value === undefined) return "";
+    return value === 1
+      ? "bg-green-100 text-green-700"
+      : "bg-amber-100 text-amber-700";
+  };
+
+  const stockLabel = getStockLabel(displayStock);
+  const stockClasses = getStockClasses(displayStock);
     <>
       <Card
         className="group overflow-hidden bg-card border border-border/40 rounded-2xl shadow-card hover:shadow-glow transition-smooth hover:-translate-y-1 h-full flex flex-col cursor-pointer"

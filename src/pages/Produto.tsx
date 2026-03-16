@@ -91,11 +91,11 @@ const Produto = () => {
               {category && <Badge variant="secondary">{category}</Badge>}
               {stock !== null && !isNaN(stock) && (
                 <Badge
-                  variant={stock > 0 ? "default" : "destructive"}
-                  className={stock > 0 ? "bg-green-600 hover:bg-green-700" : ""}
+                  variant={stock === 1 ? "default" : "secondary"}
+                  className={stock === 1 ? "bg-green-600 hover:bg-green-700" : "bg-amber-500 hover:bg-amber-600 text-white"}
                 >
                   <Package className="w-3 h-3 mr-1" />
-                  {stock > 0 ? `${stock} em stock` : "Esgotado"}
+                  {stock === 1 ? "Em Stock" : "Sob Encomenda"}
                 </Badge>
               )}
             </div>

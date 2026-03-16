@@ -115,23 +115,19 @@ const ProductCard = ({
         </div>
         <CardContent className="p-5 flex flex-col flex-1 gap-2">
           {/* Category & Stock badges */}
-          {(category || displayStock !== undefined) && (
+          {(category || stockLabel) && (
             <div className="flex items-center gap-2 flex-wrap">
               {category && (
                 <span className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
                   {category}
                 </span>
               )}
-              {displayStock !== undefined && displayStock !== null && (
+              {stockLabel && (
                 <span
-                  className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full ${
-                    displayStock > 0
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+                  className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full ${stockClasses}`}
                 >
                   <Package className="w-3 h-3" />
-                  {displayStock > 0 ? `${displayStock} em stock` : "Esgotado"}
+                  {stockLabel}
                 </span>
               )}
             </div>

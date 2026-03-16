@@ -16,6 +16,7 @@ import Substratos from "./pages/Substratos";
 import TestesMedicamentos from "./pages/TestesMedicamentos";
 import Aquarios from "./pages/Aquarios";
 import Aquecimento from "./pages/Aquecimento";
+import Acessorios from "./pages/Acessorios";
 import Produto from "./pages/Produto";
 import NotFound from "./pages/NotFound";
 

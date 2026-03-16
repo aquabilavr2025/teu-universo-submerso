@@ -82,6 +82,22 @@ const ProductCard = ({
 
   const displayStock = stock ?? quantity;
 
+  // Helper to convert numeric stock to status label
+  const getStockLabel = (value: number | null | undefined): string | null => {
+    if (value === null || value === undefined) return null;
+    return value === 1 ? "Em Stock" : "Sob Encomenda";
+  };
+
+  const getStockClasses = (value: number | null | undefined): string => {
+    if (value === null || value === undefined) return "";
+    return value === 1
+      ? "bg-green-100 text-green-700"
+      : "bg-amber-100 text-amber-700";
+  };
+
+  const stockLabel = getStockLabel(displayStock);
+  const stockClasses = getStockClasses(displayStock);
+
   return (
     <>
       <Card
@@ -101,23 +117,19 @@ const ProductCard = ({
         </div>
         <CardContent className="p-5 flex flex-col flex-1 gap-2">
           {/* Category & Stock badges */}
-          {(category || displayStock !== undefined) && (
+          {(category || stockLabel) && (
             <div className="flex items-center gap-2 flex-wrap">
               {category && (
                 <span className="inline-block px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
                   {category}
                 </span>
               )}
-              {displayStock !== undefined && displayStock !== null && (
+              {stockLabel && (
                 <span
-                  className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full ${
-                    displayStock > 0
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+                  className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full ${stockClasses}`}
                 >
                   <Package className="w-3 h-3" />
-                  {displayStock > 0 ? `${displayStock} em stock` : "Esgotado"}
+                  {stockLabel}
                 </span>
               )}
             </div>

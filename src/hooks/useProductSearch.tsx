@@ -16,6 +16,7 @@ const CATEGORIES = [
   { key: "Testes/Medicamentos", label: "Testes/Medicamentos", path: "/testes-medicamentos" },
   { key: "Aquários", label: "Aquários", path: "/aquarios" },
   { key: "Aquecimento", label: "Aquecimento", path: "/aquecimento" },
+  { key: "Acessórios", label: "Acessórios", path: "/acessorios" },
 ];
 
 export interface SearchableProduct extends ProductItem {

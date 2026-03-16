@@ -16,6 +16,7 @@ import Substratos from "./pages/Substratos";
 import TestesMedicamentos from "./pages/TestesMedicamentos";
 import Aquarios from "./pages/Aquarios";
 import Aquecimento from "./pages/Aquecimento";
+import Acessorios from "./pages/Acessorios";
 import Produto from "./pages/Produto";
 import NotFound from "./pages/NotFound";
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/testes-medicamentos" element={<TestesMedicamentos />} />
             <Route path="/aquarios" element={<Aquarios />} />
             <Route path="/aquecimento" element={<Aquecimento />} />
+            <Route path="/acessorios" element={<Acessorios />} />
             <Route path="/produto" element={<Produto />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -22,6 +22,7 @@ const categoryLinks = [
   { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
   { href: "/aquarios", label: "Aquários" },
   { href: "/aquecimento", label: "Aquecimento" },
+  { href: "/acessorios", label: "Acessórios" },
 ];
 
 const Navbar = () => {

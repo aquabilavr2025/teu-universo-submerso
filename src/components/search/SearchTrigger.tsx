@@ -28,9 +28,6 @@ export const SearchBar = ({ onClick }: { onClick: () => void }) => {
     >
       <Search className="w-4 h-4" />
       <span>Pesquisar produtos...</span>
-      <kbd className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 bg-background rounded text-xs font-mono border border-border">
-        ⌘K
-      </kbd>
     </button>
   );
 };

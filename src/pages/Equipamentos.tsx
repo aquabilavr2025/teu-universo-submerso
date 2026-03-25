@@ -13,7 +13,7 @@ const Equipamentos = () => {
     <Layout>
       <PageHero
         title="Iluminação e Filtragem"
-        subtitle="Equipamentos de qualidade profissional para o teu aquário funcionar na perfeição."
+        subtitle="• Iluminação profissional\n• Sistemas de filtragem eficientes\n• Desempenho sem compromissos"
       />
 
       <section className="py-16 bg-background">

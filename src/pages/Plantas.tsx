@@ -80,7 +80,6 @@ const PlantCategoryContent = ({ categoryId }: { categoryId: PlantCategoryId }) =
               price={item.price}
               description={item.description}
               stock={item.stock}
-              showAddToCart
             />
           </div>
         ))}

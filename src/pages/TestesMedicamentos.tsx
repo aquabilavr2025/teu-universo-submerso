@@ -13,7 +13,7 @@ const TestesMedicamentos = () => {
     <Layout>
       <PageHero
         title="Testes/Medicamentos"
-        subtitle="Monitoriza a qualidade da água e cuida da saúde dos teus peixes com os nossos kits de teste e medicamentos especializados."
+        subtitle="• Kits de teste rigorosos\n• Medicamentos especializados\n• Monitorize a saúde aquática"
       />
 
       {/* Intro Section */}

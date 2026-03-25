@@ -13,7 +13,7 @@ const Substratos = () => {
     <Layout>
       <PageHero
         title="Substratos"
-        subtitle="A base perfeita para um aquário saudável. Substratos férteis e inertes de qualidade."
+        subtitle="• Substratos férteis e inertes\n• Qualidade comprovada\n• Base ideal para aquários saudáveis"
       />
 
       <section className="py-16 bg-background">

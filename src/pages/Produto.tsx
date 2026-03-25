@@ -2,9 +2,16 @@ import { useSearchParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, MessageCircle, Package, ArrowLeft } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ShoppingCart, Package, ArrowLeft } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import { parseDescriptionBullets } from "@/lib/utils";
 
 const parsePriceToNumber = (price: string): number => {
   const cleanPrice = price.replace("€", "").replace(",", ".").trim();
@@ -28,12 +35,6 @@ const Produto = () => {
   const category = searchParams.get("categoria") || "";
   const backPath = searchParams.get("origem") || "/";
 
-  const whatsappNumber = "351938589917";
-  const whatsappMessage = encodeURIComponent(
-    `Olá! Gostaria de encomendar: ${name} - Preço: ${price}`
-  );
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
-
   const handleAddToCart = () => {
     addItem({
       id: generateId(name),
@@ -50,7 +51,11 @@ const Produto = () => {
       <Layout>
         <div className="container mx-auto px-4 py-24 text-center">
           <p className="text-muted-foreground">Produto não encontrado.</p>
-          <Button variant="outline" className="mt-4" onClick={() => window.history.back()}>
+          <Button
+            variant="outline"
+            className="mt-4"
+            onClick={() => window.history.back()}
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
           </Button>
@@ -61,8 +66,7 @@ const Produto = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Back button */}
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
         <a
           href={backPath}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -71,72 +75,84 @@ const Produto = () => {
           Voltar ao catálogo
         </a>
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          {/* Image */}
-          <div className="aspect-square overflow-hidden rounded-2xl bg-muted shadow-card">
-            <img
-              src={image || "/placeholder.svg"}
-              alt={name}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "/placeholder.svg";
-              }}
-            />
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-start">
+          {/* Imagem maior */}
+          <div className="w-full max-w-[520px] mx-auto overflow-hidden rounded-3xl bg-muted shadow-card">
+            <div className="aspect-[4/5]">
+              <img
+                src={image || "/placeholder.svg"}
+                alt={name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/placeholder.svg";
+                }}
+              />
+            </div>
           </div>
 
-          {/* Details */}
+          {/* Detalhes */}
           <div className="space-y-6">
-            {/* Badges */}
             <div className="flex items-center gap-2 flex-wrap">
               {category && <Badge variant="secondary">{category}</Badge>}
+
               {stock !== null && !isNaN(stock) && (
                 <Badge
-                  variant={stock > 0 ? "default" : "destructive"}
-                  className={stock > 0 ? "bg-green-600 hover:bg-green-700" : ""}
+                  variant={stock === 1 ? "default" : "secondary"}
+                  className={
+                    stock === 1
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-amber-500 hover:bg-amber-600 text-white"
+                  }
                 >
                   <Package className="w-3 h-3 mr-1" />
-                  {stock > 0 ? `${stock} em stock` : "Esgotado"}
+                  {stock === 1 ? "Em Stock" : "Sob Encomenda"}
                 </Badge>
               )}
             </div>
 
-            {/* Name */}
-            <h1 className="font-heading text-3xl font-bold text-foreground tracking-tight leading-tight">
+            <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground tracking-tight leading-tight">
               {name}
             </h1>
 
-            {/* Price */}
-            <p className="text-4xl font-bold text-primary">{price}</p>
+            <p className="text-4xl md:text-5xl font-bold text-primary">{price}</p>
 
-            {/* Description */}
-            {description && (
-              <div className="border-t border-border/30 pt-5">
-                <h2 className="text-sm font-medium text-muted-foreground mb-2 uppercase tracking-wide">
+            <Button
+              onClick={handleAddToCart}
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground gap-2 rounded-full px-6 transition-bounce hover:scale-105"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Adicionar ao carrinho
+            </Button>
+
+            <Accordion type="multiple" className="w-full">
+              <AccordionItem value="descricao">
+                <AccordionTrigger className="text-sm font-medium">
                   Descrição
-                </h2>
-                <p className="text-foreground leading-relaxed">{description}</p>
-              </div>
-            )}
+                </AccordionTrigger>
+                <AccordionContent>
+                  {description ? (
+                    <div className="space-y-2">
+                      {parseDescriptionBullets(description).map((text, idx) => (
+                        <p key={idx} className="text-foreground leading-relaxed">
+                          {text}
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground">Sem descrição disponível.</p>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
 
-            {/* Actions */}
-            <div className="flex gap-3 pt-2">
-              <Button
-                onClick={handleAddToCart}
-                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2 rounded-full transition-bounce hover:scale-105"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                Adicionar ao carrinho
-              </Button>
-              <Button
-                asChild
-                className="flex-1 bg-[#25D366] hover:bg-[#20BD5A] text-white gap-2 rounded-full"
-              >
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4" />
-                  Encomendar
-                </a>
-              </Button>
-            </div>
+              <AccordionItem value="detalhes">
+                <AccordionTrigger className="text-sm font-medium">
+                  Detalhes
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </div>

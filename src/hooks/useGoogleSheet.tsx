@@ -24,6 +24,7 @@ const SHEET_NAMES: Record<string, string> = {
   "Testes/Medicamentos": "Testes/Medicamentos",
   "Aquários": "Aquários",
   "Aquecimento": "Aquecimento",
+  "Acessórios": "Acessórios",
 };
 
 // Convert Google Drive share links to thumbnail URLs
@@ -56,50 +57,65 @@ const convertDriveLink = (driveLink: string): string => {
   return driveLink;
 };
 
-// Simple CSV parser that handles quoted fields
+// CSV parser that handles quoted fields with embedded newlines
 const parseCSV = (csv: string): string[][] => {
   const rows: string[][] = [];
-  const lines = csv.split(/\r?\n/);
-  
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    
-    const row: string[] = [];
-    let current = "";
-    let inQuotes = false;
-    
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      
+  let row: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < csv.length; i++) {
+    const char = csv[i];
+
+    if (inQuotes) {
       if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') {
+        if (csv[i + 1] === '"') {
           current += '"';
           i++;
         } else {
-          inQuotes = !inQuotes;
+          inQuotes = false;
         }
-      } else if (char === "," && !inQuotes) {
+      } else {
+        current += char;
+      }
+    } else {
+      if (char === '"') {
+        inQuotes = true;
+      } else if (char === ",") {
         row.push(current);
         current = "";
+      } else if (char === "\n" || (char === "\r" && csv[i + 1] === "\n")) {
+        if (char === "\r") i++; // skip \n after \r
+        row.push(current);
+        current = "";
+        if (row.some(cell => cell.trim())) {
+          rows.push(row);
+        }
+        row = [];
       } else {
         current += char;
       }
     }
-    row.push(current);
+  }
+  // Push last field and row
+  row.push(current);
+  if (row.some(cell => cell.trim())) {
     rows.push(row);
   }
-  
+
   return rows;
 };
 
 // Sanitize text: strip HTML tags, encoding artifacts, and unwanted special characters
+// Preserves intentional newlines for multiline descriptions
 const sanitizeText = (text: string): string => {
   if (!text) return "";
   return text
     .replace(/<[^>]*>/g, "") // Remove HTML tags
     .replace(/&[a-zA-Z]+;/g, " ") // Remove HTML entities
     .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "") // Remove zero-width and non-breaking spaces
-    .replace(/\s+/g, " ") // Normalize whitespace
+    .replace(/[^\S\n]+/g, " ") // Normalize whitespace but keep newlines
+    .replace(/\n{3,}/g, "\n\n") // Collapse excessive newlines
     .trim();
 };
 

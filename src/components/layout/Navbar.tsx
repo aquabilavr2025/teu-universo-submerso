@@ -13,15 +13,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const categoryLinks = [
-  { href: "/peixes", label: "Peixes" },
-  { href: "/plantas", label: "Plantas" },
+  { href: "/acessorios", label: "Acessórios" },
   { href: "/alimentacao", label: "Alimentação" },
-  { href: "/condicionadores", label: "Condicionadores" },
-  { href: "/equipamentos", label: "Equipamentos" },
-  { href: "/substratos", label: "Substratos" },
-  { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
   { href: "/aquarios", label: "Aquários" },
   { href: "/aquecimento", label: "Aquecimento" },
+  { href: "/condicionadores", label: "Condicionadores" },
+  { href: "/equipamentos", label: "Equipamentos" },
+  { href: "/peixes", label: "Peixes" },
+  { href: "/plantas", label: "Plantas" },
+  { href: "/substratos", label: "Substratos" },
+  { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
 ];
 
 const Navbar = () => {

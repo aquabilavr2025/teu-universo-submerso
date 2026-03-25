@@ -352,9 +352,6 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
                 <p className="text-sm">
                   Comece a escrever para pesquisar produtos
                 </p>
-                <p className="text-xs mt-2 opacity-70">
-                  Dica: Use <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs">⌘K</kbd> para abrir rapidamente
-                </p>
               </div>
             )}
           </div>

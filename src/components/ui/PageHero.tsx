@@ -35,7 +35,7 @@ const PageHero = ({ title, subtitle, image }: PageHeroProps) => {
           {title}
         </h1>
         {subtitle && (
-          <p className="font-body text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="font-body text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto animate-fade-in whitespace-pre-line leading-relaxed" style={{ animationDelay: "0.2s" }}>
             {subtitle}
           </p>
         )}

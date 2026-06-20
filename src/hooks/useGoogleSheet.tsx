@@ -25,6 +25,9 @@ const SHEET_NAMES: Record<string, string> = {
   "Aquários": "Aquários",
   "Aquecimento": "Aquecimento",
   "Acessórios": "Acessórios",
+  "Co2": "Co2",
+  "Alimentação Congelada": "Alimentação Congelada",
+  "Troncos/Rochas": "Troncos/Rochas",
 };
 
 // Convert Google Drive share links to thumbnail URLs

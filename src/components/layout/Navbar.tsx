@@ -15,14 +15,17 @@ import {
 const categoryLinks = [
   { href: "/acessorios", label: "Acessórios" },
   { href: "/alimentacao", label: "Alimentação" },
+  { href: "/alimentacao-congelada", label: "Alimentação Congelada" },
   { href: "/aquarios", label: "Aquários" },
   { href: "/aquecimento", label: "Aquecimento" },
+  { href: "/co2", label: "Co2" },
   { href: "/condicionadores", label: "Condicionadores" },
   { href: "/equipamentos", label: "Equipamentos" },
   { href: "/peixes", label: "Peixes" },
   { href: "/plantas", label: "Plantas" },
   { href: "/substratos", label: "Substratos" },
   { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
+  { href: "/troncos-rochas", label: "Troncos/Rochas" },
 ];
 
 const Navbar = () => {

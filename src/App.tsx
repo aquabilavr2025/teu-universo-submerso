@@ -17,6 +17,9 @@ import TestesMedicamentos from "./pages/TestesMedicamentos";
 import Aquarios from "./pages/Aquarios";
 import Aquecimento from "./pages/Aquecimento";
 import Acessorios from "./pages/Acessorios";
+import Co2 from "./pages/Co2";
+import AlimentacaoCongelada from "./pages/AlimentacaoCongelada";
+import TroncosRochas from "./pages/TroncosRochas";
 import Produto from "./pages/Produto";
 import NotFound from "./pages/NotFound";
 
@@ -43,6 +46,9 @@ const App = () => (
             <Route path="/aquarios" element={<Aquarios />} />
             <Route path="/aquecimento" element={<Aquecimento />} />
             <Route path="/acessorios" element={<Acessorios />} />
+            <Route path="/co2" element={<Co2 />} />
+            <Route path="/alimentacao-congelada" element={<AlimentacaoCongelada />} />
+            <Route path="/troncos-rochas" element={<TroncosRochas />} />
             <Route path="/produto" element={<Produto />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

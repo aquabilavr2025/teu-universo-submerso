@@ -17,6 +17,9 @@ const CATEGORIES = [
   { key: "Aquários", label: "Aquários", path: "/aquarios" },
   { key: "Aquecimento", label: "Aquecimento", path: "/aquecimento" },
   { key: "Acessórios", label: "Acessórios", path: "/acessorios" },
+  { key: "Co2", label: "Co2", path: "/co2" },
+  { key: "Alimentação Congelada", label: "Alimentação Congelada", path: "/alimentacao-congelada" },
+  { key: "Troncos/Rochas", label: "Troncos/Rochas", path: "/troncos-rochas" },
 ];
 
 export interface SearchableProduct extends ProductItem {

@@ -21,6 +21,8 @@ import Co2 from "./pages/Co2";
 import AlimentacaoCongelada from "./pages/AlimentacaoCongelada";
 import TroncosRochas from "./pages/TroncosRochas";
 import Produto from "./pages/Produto";
+import TermosLegais from "./pages/TermosLegais";
+import EnviosDevolucoes from "./pages/EnviosDevolucoes";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +52,8 @@ const App = () => (
             <Route path="/alimentacao-congelada" element={<AlimentacaoCongelada />} />
             <Route path="/troncos-rochas" element={<TroncosRochas />} />
             <Route path="/produto" element={<Produto />} />
+            <Route path="/termos-legais" element={<TermosLegais />} />
+            <Route path="/envios-devolucoes" element={<EnviosDevolucoes />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

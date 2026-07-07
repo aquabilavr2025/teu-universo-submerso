@@ -121,7 +121,14 @@ const Footer = () => {
               </a>
               <div className="flex items-start gap-3 text-primary-foreground/80">
                 <MapPin className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
-                <span>Largo do Souto<br />5000-747 Torgueda-Vila Real</span>
+                <a
+                  href="https://maps.app.goo.gl/UVro9wCCynYXb9Ro8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-teal transition-colors"
+                >
+                  Torgueda-Vila Real
+                </a>
               </div>
             </div>
 

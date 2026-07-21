@@ -60,6 +60,7 @@ const Co2 = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/co2"
                   />
                 </div>
               ))}

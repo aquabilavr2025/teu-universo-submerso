@@ -13,18 +13,21 @@ const Footer = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const to = "aquabilavr2025@gmail.com";
-    const subject = encodeURIComponent(`Mensagem via site de ${formData.name || "Cliente"}`);
-    const body = encodeURIComponent(`Nome: ${formData.name}\nEmail: ${formData.email}\n\nMensagem:\n${formData.message}`);
-    const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
 
-    // Open user's mail client with prefilled message
-    window.location.href = mailto;
+    const recipient = "aquabilavr2025@gmail.com";
+    const subject = `Mensagem via site de ${formData.name || "Cliente"}`;
+    const body = formData.message;
 
-    toast.success("Mensagem preparada no seu cliente de email.");
-    setFormData({ name: "", email: "", message: "" });
+    const mailtoUrl =
+      `mailto:${recipient}` +
+      `?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoUrl;
+
+    toast.success("A mensagem foi preparada na aplicação de email.");
   };
 
   const whatsappLink = "https://wa.me/351938589917";

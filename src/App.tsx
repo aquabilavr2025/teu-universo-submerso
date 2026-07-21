@@ -1,11 +1,20 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  ScrollRestoration,
+} from "react-router-dom";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/cart/CartDrawer";
-import ScrollToTop from "@/components/layout/ScrollToTop";
+
 import Index from "./pages/Index";
 import Peixes from "./pages/Peixes";
 import Plantas from "./pages/Plantas";
@@ -27,39 +36,111 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <CartProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <CartDrawer />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/peixes" element={<Peixes />} />
-            <Route path="/plantas" element={<Plantas />} />
-            <Route path="/alimentacao" element={<Alimentacao />} />
-            <Route path="/condicionadores" element={<Condicionadores />} />
-            <Route path="/equipamentos" element={<Equipamentos />} />
-            <Route path="/substratos" element={<Substratos />} />
-            <Route path="/testes-medicamentos" element={<TestesMedicamentos />} />
-            <Route path="/aquarios" element={<Aquarios />} />
-            <Route path="/aquecimento" element={<Aquecimento />} />
-            <Route path="/acessorios" element={<Acessorios />} />
-            <Route path="/co2" element={<Co2 />} />
-            <Route path="/alimentacao-congelada" element={<AlimentacaoCongelada />} />
-            <Route path="/troncos-rochas" element={<TroncosRochas />} />
-            <Route path="/produto" element={<Produto />} />
-            <Route path="/termos-legais" element={<TermosLegais />} />
-            <Route path="/envios-devolucoes" element={<EnviosDevolucoes />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </CartProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const AppShell = () => {
+  return (
+    <>
+      <CartDrawer />
+
+      <Outlet />
+
+      <ScrollRestoration />
+    </>
+  );
+};
+
+const router = createBrowserRouter([
+  {
+    element: <AppShell />,
+    children: [
+      {
+        index: true,
+        element: <Index />,
+      },
+      {
+        path: "peixes",
+        element: <Peixes />,
+      },
+      {
+        path: "plantas",
+        element: <Plantas />,
+      },
+      {
+        path: "alimentacao",
+        element: <Alimentacao />,
+      },
+      {
+        path: "condicionadores",
+        element: <Condicionadores />,
+      },
+      {
+        path: "equipamentos",
+        element: <Equipamentos />,
+      },
+      {
+        path: "substratos",
+        element: <Substratos />,
+      },
+      {
+        path: "testes-medicamentos",
+        element: <TestesMedicamentos />,
+      },
+      {
+        path: "aquarios",
+        element: <Aquarios />,
+      },
+      {
+        path: "aquecimento",
+        element: <Aquecimento />,
+      },
+      {
+        path: "acessorios",
+        element: <Acessorios />,
+      },
+      {
+        path: "co2",
+        element: <Co2 />,
+      },
+      {
+        path: "alimentacao-congelada",
+        element: <AlimentacaoCongelada />,
+      },
+      {
+        path: "troncos-rochas",
+        element: <TroncosRochas />,
+      },
+      {
+        path: "produto",
+        element: <Produto />,
+      },
+      {
+        path: "termos-legais",
+        element: <TermosLegais />,
+      },
+      {
+        path: "envios-devolucoes",
+        element: <EnviosDevolucoes />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
+  },
+]);
+
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <CartProvider>
+          <Toaster />
+          <Sonner />
+
+          <RouterProvider router={router} />
+        </CartProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -60,6 +60,7 @@ const Condicionadores = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/condicionadores"
                   />
                 </div>
               ))}

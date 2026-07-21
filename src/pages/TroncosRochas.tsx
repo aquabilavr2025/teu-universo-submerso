@@ -60,6 +60,7 @@ const TroncosRochas = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/troncos-rochas"
                   />
                 </div>
               ))}

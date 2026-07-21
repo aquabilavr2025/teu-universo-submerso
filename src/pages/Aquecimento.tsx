@@ -60,6 +60,7 @@ const Aquecimento = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/aquecimento"
                   />
                 </div>
               ))}

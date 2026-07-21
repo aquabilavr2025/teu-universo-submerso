@@ -60,6 +60,7 @@ const Substratos = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/substratos"
                   />
                 </div>
               ))}

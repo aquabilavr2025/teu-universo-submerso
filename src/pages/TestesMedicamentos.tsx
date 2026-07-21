@@ -86,6 +86,7 @@ const TestesMedicamentos = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/testes-medicamentos"
                   />
                 </div>
               ))}

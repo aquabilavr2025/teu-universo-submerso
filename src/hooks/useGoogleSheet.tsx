@@ -206,10 +206,19 @@ export const useGoogleSheet = (tabName: string) => {
   return useQuery({
     queryKey: ["sheet-inventory", tabName],
     queryFn: () => fetchSheetData(tabName),
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
+
+    // Consider the inventory fresh for 5 minutes.
+    staleTime: 5 * 60 * 1000,
+
+    // Keep inactive inventory in memory for 30 minutes.
+    gcTime: 30 * 60 * 1000,
+
+    // Do not reload when returning to the page.
+    refetchOnMount: false,
+
+    // Do not reload when returning to the browser tab.
+    refetchOnWindowFocus: false,
+
     retry: 2,
   });
 };

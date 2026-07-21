@@ -13,18 +13,21 @@ const Footer = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const to = "aquabilavr2025@gmail.com";
-    const subject = encodeURIComponent(`Mensagem via site de ${formData.name || "Cliente"}`);
-    const body = encodeURIComponent(`Nome: ${formData.name}\nEmail: ${formData.email}\n\nMensagem:\n${formData.message}`);
-    const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
 
-    // Open user's mail client with prefilled message
-    window.location.href = mailto;
+    const recipient = "aquabilavr2025@gmail.com";
+    const subject = `Mensagem via site de ${formData.name || "Cliente"}`;
+    const body = formData.message;
 
-    toast.success("Mensagem preparada no seu cliente de email.");
-    setFormData({ name: "", email: "", message: "" });
+    const mailtoUrl =
+      `mailto:${recipient}` +
+      `?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoUrl;
+
+    toast.success("A mensagem foi preparada na aplicação de email.");
   };
 
   const whatsappLink = "https://wa.me/351938589917";
@@ -121,7 +124,14 @@ const Footer = () => {
               </a>
               <div className="flex items-start gap-3 text-primary-foreground/80">
                 <MapPin className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
-                <span>Largo do Souto<br />5000-747 Torgueda-Vila Real</span>
+                <a
+                  href="https://maps.app.goo.gl/UVro9wCCynYXb9Ro8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-teal transition-colors"
+                >
+                  Torgueda-Vila Real
+                </a>
               </div>
             </div>
 

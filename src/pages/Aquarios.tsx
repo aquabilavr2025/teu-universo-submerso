@@ -60,6 +60,7 @@ const Aquarios = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/aquarios"
                   />
                 </div>
               ))}

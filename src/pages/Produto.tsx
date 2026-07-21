@@ -1,4 +1,8 @@
-import { useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +28,10 @@ const generateId = (name: string): string => {
 
 const Produto = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { addItem } = useCart();
+
 
   const name = searchParams.get("nome") || "";
   const price = searchParams.get("preco") || "";
@@ -34,6 +41,17 @@ const Produto = () => {
   const stock = stockStr !== null ? parseInt(stockStr, 10) : null;
   const category = searchParams.get("categoria") || "";
   const backPath = searchParams.get("origem") || "/";
+
+  const handleBack = () => {
+    if (location.key !== "default") {
+      navigate(-1);
+      return;
+    }
+
+    navigate(backPath, {
+      replace: true,
+    });
+  };
 
   const handleAddToCart = () => {
     addItem({
@@ -54,7 +72,7 @@ const Produto = () => {
           <Button
             variant="outline"
             className="mt-4"
-            onClick={() => window.history.back()}
+            onClick={handleBack}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -67,13 +85,14 @@ const Produto = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12 max-w-6xl">
-        <a
-          href={backPath}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+        <button
+          type="button"
+          onClick={handleBack}
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
           Voltar ao catálogo
-        </a>
+        </button>
 
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-start">
           {/* Imagem maior */}

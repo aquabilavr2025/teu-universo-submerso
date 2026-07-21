@@ -60,6 +60,7 @@ const Alimentacao = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/alimentacao"
                   />
                 </div>
               ))}

@@ -6,7 +6,7 @@ import { useGoogleSheet } from "@/hooks/useGoogleSheet";
 import { AlertCircle, RefreshCw, Leaf, FlaskConical, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const PLANT_CATEGORIES = [
   { id: "plantas-vaso", label: "Plantas em Vaso", icon: Leaf },
@@ -80,6 +80,7 @@ const PlantCategoryContent = ({ categoryId }: { categoryId: PlantCategoryId }) =
               price={item.price}
               description={item.description}
               stock={item.stock}
+              href={`/plantas?tab=${categoryId}`}
             />
           </div>
         ))}
@@ -89,7 +90,27 @@ const PlantCategoryContent = ({ categoryId }: { categoryId: PlantCategoryId }) =
 };
 
 const Plantas = () => {
-  const [activeTab, setActiveTab] = useState<PlantCategoryId>("plantas-vaso");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const tabParam = searchParams.get("tab");
+
+  const activeTab: PlantCategoryId = PLANT_CATEGORIES.some(
+    (category) => category.id === tabParam
+  )
+    ? (tabParam as PlantCategoryId)
+    : "plantas-vaso";
+
+  const handleTabChange = (value: string) => {
+    const nextTab = value as PlantCategoryId;
+
+    setSearchParams(
+      { tab: nextTab },
+      {
+        replace: true,
+        preventScrollReset: true,
+      }
+    );
+  };
 
   return (
     <Layout>
@@ -100,7 +121,11 @@ const Plantas = () => {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as PlantCategoryId)} className="w-full">
+          <Tabs
+            value={activeTab}
+            onValueChange={handleTabChange}
+            className="w-full"
+          >
             <TabsList className="w-full max-w-2xl mx-auto mb-10 h-auto flex-wrap bg-muted/50 p-1.5 rounded-xl">
               {PLANT_CATEGORIES.map((category) => {
                 const Icon = category.icon;

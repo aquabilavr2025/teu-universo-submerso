@@ -7,7 +7,13 @@ import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Peixes = () => {
-  const { data: fishInventory, isLoading, isError, refetch, isFetching } = useGoogleSheet("peixes");
+  const {
+    data: fishInventory,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useGoogleSheet("peixes");
 
   return (
     <Layout>
@@ -16,50 +22,67 @@ const Peixes = () => {
         subtitle="Descobre a nossa coleção de espécies tropicais e de água fria. Qualidade e saúde garantidas."
       />
 
-      <section className="py-16 bg-background">
+      <section className="bg-background py-16">
         <div className="container mx-auto px-4">
           {isFetching && !isLoading && (
-            <div className="flex items-center justify-center gap-2 mb-6 text-muted-foreground">
+            <div className="mb-6 flex items-center justify-center gap-2 text-muted-foreground">
               <RefreshCw className="h-4 w-4 animate-spin" />
-              <span className="text-sm">A atualizar inventário...</span>
+
+              <span className="text-sm">
+                A atualizar inventário...
+              </span>
             </div>
           )}
 
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {Array.from({ length: 8 }).map((_, index) => (
                 <ProductCardSkeleton key={index} />
               ))}
             </div>
           ) : isError ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-              <h3 className="text-lg font-medium mb-2">Erro ao carregar inventário</h3>
-              <p className="text-muted-foreground mb-4">
+              <AlertCircle className="mb-4 h-12 w-12 text-destructive" />
+
+              <h3 className="mb-2 text-lg font-medium">
+                Erro ao carregar inventário
+              </h3>
+
+              <p className="mb-4 text-muted-foreground">
                 Não foi possível obter os dados. Por favor, tenta novamente.
               </p>
-              <Button onClick={() => refetch()} variant="outline">
-                <RefreshCw className="h-4 w-4 mr-2" />
+
+              <Button
+                type="button"
+                onClick={() => refetch()}
+                variant="outline"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
                 Tentar novamente
               </Button>
             </div>
           ) : !fishInventory || fishInventory.length === 0 ? (
-            <p className="text-center text-muted-foreground">Nenhum peixe disponível de momento.</p>
+            <p className="text-center text-muted-foreground">
+              Nenhum peixe disponível de momento.
+            </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {fishInventory.map((fish, index) => (
-                <div 
-                  key={`${fish.name}-${index}`} 
-                  className="animate-fade-in" 
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                <div
+                  key={`${fish.name}-${index}`}
+                  className="animate-fade-in"
+                  style={{
+                    animationDelay: `${index * 0.05}s`,
+                  }}
                 >
-                  <ProductCard 
+                  <ProductCard
                     image={fish.image}
                     name={fish.name}
                     price={fish.price}
                     description={fish.description}
                     stock={fish.stock}
                     showAddToCart
+                    href="/peixes"
                   />
                 </div>
               ))}

@@ -60,6 +60,7 @@ const AlimentacaoCongelada = () => {
                     description={item.description}
                     stock={item.stock}
                     showAddToCart
+                    href="/alimentacao-congelada"
                   />
                 </div>
               ))}

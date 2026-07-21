@@ -153,34 +153,6 @@ const legalSections = [
   },
 ];
 
-const usefulLinks = [
-  {
-    label: "Política de Privacidade",
-    href: "/politica-privacidade",
-    description: "Informação detalhada sobre tratamento de dados pessoais.",
-  },
-  {
-    label: "Política de Cookies",
-    href: "/politica-cookies",
-    description: "Gestão de cookies e tecnologias semelhantes.",
-  },
-  {
-    label: "Livro de Reclamações Eletrónico",
-    href: "https://www.livroreclamacoes.pt/inicio",
-    description: "Apresentação de reclamações por via eletrónica.",
-  },
-  {
-    label: "Entidades RAL — Direção-Geral do Consumidor",
-    href: "https://www.consumidor.gov.pt/ral-mapa-e-lista-de-entidades",
-    description: "Lista de entidades de resolução alternativa de litígios.",
-  },
-  {
-    label: "CNPD",
-    href: "https://www.cnpd.pt",
-    description: "Autoridade nacional de controlo em matéria de proteção de dados.",
-  },
-];
-
 const TermosLegais = () => {
   return (
     <Layout>

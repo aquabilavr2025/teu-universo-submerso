@@ -10,28 +10,25 @@ export interface ProductItem {
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 
-// Legacy page keys -> exact Google Sheets tab names (case-sensitive).
-// New pages pass the exact tab name directly.
+// Sheet names exactly as they appear in Google Sheets (case-sensitive)
 const SHEET_NAMES: Record<string, string> = {
-  peixes: "Peixes",
-  plantas: "Plantas Em Vaso",
-  "plantas-vaso": "Plantas Em Vaso",
-  "plantas-vitro": "Plantas In Vitro",
-  "plantas-clip": "Plantas Em Clip",
-  "alimentação": "Alimentação",
-  "condicionadores\\fertilizantes": "Condicionadores",
-  condicionadores: "Condicionadores",
-  "filtragem e iluminação": "Filtragem e Iluminação",
-  substratos: "Substratos",
-  "Testes/Medicamentos": "TestesMedicamentos",
-  "Troncos/Rochas": "TroncosRochas",
+  peixes: "peixes",
+  plantas: "plantas",
+  "plantas-vaso": "Plantas em Vaso",
+  "plantas-vitro": "Plantas in Vitro",
+  "plantas-clip": "Plantas em Clip",
+  alimentação: "alimentação",
+  "condicionadores\\fertilizantes": "condicionadores\\fertilizantes",
+  "filtragem e iluminação": "filtragem e iluminação",
+  substratos: "substratos",
+  "Testes/Medicamentos": "Testes/Medicamentos",
   "Aquários": "Aquários",
   "Aquecimento": "Aquecimento",
   "Acessórios": "Acessórios",
   "Co2": "Co2",
   "Alimentação Congelada": "Alimentação Congelada",
+  "Troncos/Rochas": "Troncos/Rochas",
 };
-
 
 // Convert Google Drive share links to thumbnail URLs
 const convertDriveLink = (driveLink: string): string => {

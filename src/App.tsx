@@ -33,6 +33,9 @@ import Produto from "./pages/Produto";
 import TermosLegais from "./pages/TermosLegais";
 import EnviosDevolucoes from "./pages/EnviosDevolucoes";
 import NotFound from "./pages/NotFound";
+import CategoryPage from "./pages/CategoryPage";
+import { GENERIC_CATEGORIES } from "@/config/categories";
+
 
 const queryClient = new QueryClient();
 

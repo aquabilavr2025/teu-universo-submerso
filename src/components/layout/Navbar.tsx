@@ -12,21 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const categoryLinks = [
-  { href: "/acessorios", label: "Acessórios" },
-  { href: "/alimentacao", label: "Alimentação" },
-  { href: "/alimentacao-congelada", label: "Alimentação Congelada" },
-  { href: "/aquarios", label: "Aquários" },
-  { href: "/aquecimento", label: "Aquecimento" },
-  { href: "/co2", label: "Co2" },
-  { href: "/condicionadores", label: "Condicionadores" },
-  { href: "/equipamentos", label: "Equipamentos" },
-  { href: "/peixes", label: "Peixes" },
-  { href: "/plantas", label: "Plantas" },
-  { href: "/substratos", label: "Substratos" },
-  { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
-  { href: "/troncos-rochas", label: "Troncos/Rochas" },
-];
+import { NAV_CATEGORIES } from "@/config/categories";
+
+const categoryLinks = NAV_CATEGORIES.map((category) => ({
+  href: category.path,
+  label: category.label,
+}));
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

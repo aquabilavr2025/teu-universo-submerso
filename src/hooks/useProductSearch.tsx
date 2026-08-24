@@ -3,24 +3,13 @@ import { ProductItem } from "./useGoogleSheet";
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 
-// All categories to fetch for global search
-const CATEGORIES = [
-  { key: "peixes", label: "Peixes", path: "/peixes" },
-  { key: "Plantas em Vaso", label: "Plantas em Vaso", path: "/plantas" },
-  { key: "Plantas in Vitro", label: "Plantas in Vitro", path: "/plantas" },
-  { key: "Plantas em Clip", label: "Plantas em Clip", path: "/plantas" },
-  { key: "alimentação", label: "Alimentação", path: "/alimentacao" },
-  { key: "condicionadores\\fertilizantes", label: "Condicionadores", path: "/condicionadores" },
-  { key: "filtragem e iluminação", label: "Equipamentos", path: "/equipamentos" },
-  { key: "substratos", label: "Substratos", path: "/substratos" },
-  { key: "Testes/Medicamentos", label: "Testes/Medicamentos", path: "/testes-medicamentos" },
-  { key: "Aquários", label: "Aquários", path: "/aquarios" },
-  { key: "Aquecimento", label: "Aquecimento", path: "/aquecimento" },
-  { key: "Acessórios", label: "Acessórios", path: "/acessorios" },
-  { key: "Co2", label: "Co2", path: "/co2" },
-  { key: "Alimentação Congelada", label: "Alimentação Congelada", path: "/alimentacao-congelada" },
-  { key: "Troncos/Rochas", label: "Troncos/Rochas", path: "/troncos-rochas" },
-];
+// All categories to fetch for global search (derived from the sheet mapping)
+import { CATEGORIES as SITE_CATEGORIES } from "@/config/categories";
+
+const CATEGORIES = SITE_CATEGORIES.filter((c) => c.slug !== "plantas").map(
+  (c) => ({ key: c.sheet, label: c.label, path: c.path })
+);
+
 
 export interface SearchableProduct extends ProductItem {
   id: string;
@@ -153,7 +142,7 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
         const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
         
         return {
-          id: `${category.key}-${index}`,
+          id: `${category.label}-${index}`,
           image: convertDriveLink(imageLink?.trim() || ""),
           name: sanitizeText(name?.trim() || ""),
           price: formattedPrice,

@@ -111,10 +111,15 @@ const router = createBrowserRouter([
         path: "troncos-rochas",
         element: <TroncosRochas />,
       },
+      ...GENERIC_CATEGORIES.map((category) => ({
+        path: category.slug,
+        element: <CategoryPage category={category} />,
+      })),
       {
         path: "produto",
         element: <Produto />,
       },
+
       {
         path: "termos-legais",
         element: <TermosLegais />,

@@ -142,7 +142,7 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
         const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
         
         return {
-          id: `${category.key}-${index}`,
+          id: `${category.label}-${index}`,
           image: convertDriveLink(imageLink?.trim() || ""),
           name: sanitizeText(name?.trim() || ""),
           price: formattedPrice,

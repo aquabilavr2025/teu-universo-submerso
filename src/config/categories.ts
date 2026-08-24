@@ -182,9 +182,9 @@ export const CATEGORIES: CategoryConfig[] = [
   },
 ];
 
-export const NAV_CATEGORIES = [...CATEGORIES]
-  .filter((c) => c.slug !== "equipamentos" || true)
-  .sort((a, b) => a.label.localeCompare(b.label, "pt"));
+export const NAV_CATEGORIES = [...CATEGORIES].sort((a, b) =>
+  a.label.localeCompare(b.label, "pt")
+);
 
 export const GENERIC_CATEGORIES = CATEGORIES.filter((c) => !c.custom);
 

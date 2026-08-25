@@ -6,9 +6,9 @@ const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 // All categories to fetch for global search
 const CATEGORIES = [
   { key: "peixes", label: "Peixes", path: "/peixes" },
-  { key: "Plantas em Vaso", label: "Plantas em Vaso", path: "/plantas" },
-  { key: "Plantas in Vitro", label: "Plantas in Vitro", path: "/plantas" },
-  { key: "Plantas em Clip", label: "Plantas em Clip", path: "/plantas" },
+  { key: "Plantas em Vaso", label: "Plantas em Vaso", path: "/plantas/em-vaso" },
+  { key: "Plantas in Vitro", label: "Plantas in Vitro", path: "/plantas/in-vitro" },
+  { key: "Plantas em Clip", label: "Plantas em Clip", path: "/plantas/em-clip" },
   { key: "alimentação", label: "Alimentação", path: "/alimentacao" },
   { key: "condicionadores\\fertilizantes", label: "Condicionadores", path: "/condicionadores" },
   { key: "filtragem e iluminação", label: "Equipamentos", path: "/equipamentos" },
@@ -20,6 +20,8 @@ const CATEGORIES = [
   { key: "Co2", label: "Co2", path: "/co2" },
   { key: "Alimentação Congelada", label: "Alimentação Congelada", path: "/alimentacao-congelada" },
   { key: "Troncos/Rochas", label: "Troncos/Rochas", path: "/troncos-rochas" },
+  { key: "Filtragem", label: "Filtragem", path: "/filtragem" },
+  { key: "Jix/Sobo", label: "Jix/Sobo", path: "/jix-sobo" },
 ];
 
 export interface SearchableProduct extends ProductItem {

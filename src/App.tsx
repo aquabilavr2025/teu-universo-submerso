@@ -29,6 +29,9 @@ import Acessorios from "./pages/Acessorios";
 import Co2 from "./pages/Co2";
 import AlimentacaoCongelada from "./pages/AlimentacaoCongelada";
 import TroncosRochas from "./pages/TroncosRochas";
+import Filtragem from "./pages/Filtragem";
+import JixSobo from "./pages/JixSobo";
+import PlantaSubcategoria from "./pages/PlantaSubcategoria";
 import Produto from "./pages/Produto";
 import TermosLegais from "./pages/TermosLegais";
 import EnviosDevolucoes from "./pages/EnviosDevolucoes";
@@ -63,6 +66,18 @@ const router = createBrowserRouter([
       {
         path: "plantas",
         element: <Plantas />,
+      },
+      {
+        path: "plantas/:slug",
+        element: <PlantaSubcategoria />,
+      },
+      {
+        path: "filtragem",
+        element: <Filtragem />,
+      },
+      {
+        path: "jix-sobo",
+        element: <JixSobo />,
       },
       {
         path: "alimentacao",

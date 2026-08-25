@@ -28,6 +28,8 @@ const SHEET_NAMES: Record<string, string> = {
   "Co2": "Co2",
   "Alimentação Congelada": "Alimentação Congelada",
   "Troncos/Rochas": "Troncos/Rochas",
+  "Filtragem": "Filtragem",
+  "Jix/Sobo": "Jix/Sobo",
 };
 
 // Convert Google Drive share links to thumbnail URLs

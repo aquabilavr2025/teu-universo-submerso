@@ -90,18 +90,34 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="w-56 bg-popover">
                 {categoryLinks.map((link) => (
-                  <DropdownMenuItem key={link.href} asChild>
-                    <Link
-                      to={link.href}
-                      className={`w-full cursor-pointer ${
-                        location.pathname === link.href
-                          ? "bg-accent font-medium"
-                          : ""
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </DropdownMenuItem>
+                  <div key={link.href}>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to={link.href}
+                        className={`w-full cursor-pointer ${
+                          location.pathname === link.href
+                            ? "bg-accent font-medium"
+                            : ""
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </DropdownMenuItem>
+                    {link.children?.map((child) => (
+                      <DropdownMenuItem key={child.href} asChild>
+                        <Link
+                          to={child.href}
+                          className={`w-full cursor-pointer pl-7 text-muted-foreground ${
+                            location.pathname === child.href
+                              ? "bg-accent font-medium text-foreground"
+                              : ""
+                          }`}
+                        >
+                          {child.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>

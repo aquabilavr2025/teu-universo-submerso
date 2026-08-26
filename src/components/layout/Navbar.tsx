@@ -12,8 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { PLANT_SUBCATEGORIES } from "@/lib/plantCategories";
-
 const categoryLinks: {
   href: string;
   label: string;
@@ -26,18 +24,12 @@ const categoryLinks: {
   { href: "/aquecimento", label: "Aquecimento" },
   { href: "/co2", label: "Co2" },
   { href: "/condicionadores", label: "Condicionadores" },
+  { href: "/fertilizantes", label: "Fertilizantes" },
   { href: "/equipamentos", label: "Equipamentos" },
   { href: "/filtragem", label: "Filtragem" },
   { href: "/jix-sobo", label: "Jix/Sobo" },
   { href: "/peixes", label: "Peixes" },
-  {
-    href: "/plantas",
-    label: "Plantas",
-    children: PLANT_SUBCATEGORIES.map((sub) => ({
-      href: `/plantas/${sub.slug}`,
-      label: sub.label,
-    })),
-  },
+  { href: "/plantas", label: "Plantas" },
   { href: "/substratos", label: "Substratos" },
   { href: "/testes-medicamentos", label: "Testes/Medicamentos" },
   { href: "/troncos-rochas", label: "Troncos/Rochas" },

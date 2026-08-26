@@ -8,7 +8,7 @@ export interface ProductItem {
   stock: number | null;
 }
 
-const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
+export const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 
 // Sheet names exactly as they appear in Google Sheets (case-sensitive)
 const SHEET_NAMES: Record<string, string> = {

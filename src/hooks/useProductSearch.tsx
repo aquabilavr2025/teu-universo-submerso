@@ -12,7 +12,7 @@ const CATEGORIES = [
   { key: "alimentação", label: "Alimentação", path: "/alimentacao" },
   { key: "condicionadores", label: "Condicionadores", path: "/condicionadores" },
   { key: "fertilizantes", label: "Fertilizantes", path: "/fertilizantes" },
-  { key: "filtragem e iluminação", label: "Equipamentos", path: "/equipamentos" },
+  { key: "Iluminação", label: "Iluminação", path: "/iluminacao" },
   { key: "substratos", label: "Substratos", path: "/substratos" },
   { key: "Testes/Medicamentos", label: "Testes/Medicamentos", path: "/testes-medicamentos" },
   { key: "Aquários", label: "Aquários", path: "/aquarios" },

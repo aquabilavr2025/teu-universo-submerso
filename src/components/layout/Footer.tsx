@@ -90,7 +90,7 @@ const Footer = () => {
                 { href: "/plantas", label: "Plantas" },
                 { href: "/alimentacao", label: "Alimentação" },
                 { href: "/condicionadores", label: "Condicionadores" },
-                { href: "/equipamentos", label: "Equipamentos" },
+                { href: "/iluminacao", label: "Iluminação" },
                 { href: "/substratos", label: "Substratos" },
               ].map((link) => (
                 <Link

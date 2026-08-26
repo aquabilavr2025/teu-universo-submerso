@@ -25,7 +25,7 @@ const categoryLinks: {
   { href: "/co2", label: "Co2" },
   { href: "/condicionadores", label: "Condicionadores" },
   { href: "/fertilizantes", label: "Fertilizantes" },
-  { href: "/equipamentos", label: "Equipamentos" },
+  { href: "/iluminacao", label: "Iluminação" },
   { href: "/filtragem", label: "Filtragem" },
   { href: "/jix-sobo", label: "Jix/Sobo" },
   { href: "/peixes", label: "Peixes" },

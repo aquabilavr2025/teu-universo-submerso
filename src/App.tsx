@@ -21,7 +21,7 @@ import Plantas from "./pages/Plantas";
 import Alimentacao from "./pages/Alimentacao";
 import Condicionadores from "./pages/Condicionadores";
 import Fertilizantes from "./pages/Fertilizantes";
-import Equipamentos from "./pages/Equipamentos";
+import Iluminacao from "./pages/Iluminacao";
 import Substratos from "./pages/Substratos";
 import TestesMedicamentos from "./pages/TestesMedicamentos";
 import Aquarios from "./pages/Aquarios";
@@ -93,8 +93,8 @@ const router = createBrowserRouter([
         element: <Fertilizantes />,
       },
       {
-        path: "equipamentos",
-        element: <Equipamentos />,
+        path: "iluminacao",
+        element: <Iluminacao />,
       },
       {
         path: "substratos",

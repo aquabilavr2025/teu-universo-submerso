@@ -1,97 +1,13 @@
-import Layout from "@/components/layout/Layout";
-import PageHero from "@/components/ui/PageHero";
-import ProductCard from "@/components/ui/ProductCard";
-import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
-import { useGoogleSheet } from "@/hooks/useGoogleSheet";
-import { AlertCircle, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import CategoryPageTemplate from "@/components/catalog/CategoryPageTemplate";
 
-const Peixes = () => {
-  const {
-    data: fishInventory,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useGoogleSheet("peixes");
-
-  return (
-    <Layout>
-      <PageHero
-        title="Peixes"
-        subtitle="Descobre a nossa coleção de espécies tropicais e de água fria. Qualidade e saúde garantidas."
-      />
-
-      <section className="bg-background py-16">
-        <div className="container mx-auto px-4">
-          {isFetching && !isLoading && (
-            <div className="mb-6 flex items-center justify-center gap-2 text-muted-foreground">
-              <RefreshCw className="h-4 w-4 animate-spin" />
-
-              <span className="text-sm">
-                A atualizar inventário...
-              </span>
-            </div>
-          )}
-
-          {isLoading ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <ProductCardSkeleton key={index} />
-              ))}
-            </div>
-          ) : isError ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <AlertCircle className="mb-4 h-12 w-12 text-destructive" />
-
-              <h3 className="mb-2 text-lg font-medium">
-                Erro ao carregar inventário
-              </h3>
-
-              <p className="mb-4 text-muted-foreground">
-                Não foi possível obter os dados. Por favor, tenta novamente.
-              </p>
-
-              <Button
-                type="button"
-                onClick={() => refetch()}
-                variant="outline"
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Tentar novamente
-              </Button>
-            </div>
-          ) : !fishInventory || fishInventory.length === 0 ? (
-            <p className="text-center text-muted-foreground">
-              Nenhum peixe disponível de momento.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {fishInventory.map((fish, index) => (
-                <div
-                  key={`${fish.name}-${index}`}
-                  className="animate-fade-in"
-                  style={{
-                    animationDelay: `${index * 0.05}s`,
-                  }}
-                >
-                  <ProductCard
-                    image={fish.image}
-                    name={fish.name}
-                    price={fish.price}
-                    description={fish.description}
-                    stock={fish.stock}
-                    showAddToCart
-                    href="/peixes"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-    </Layout>
-  );
-};
+const Peixes = () => (
+  <CategoryPageTemplate
+    sheet="peixes"
+    title="Peixes"
+    subtitle="Descobre a nossa coleção de espécies tropicais e de água fria. Qualidade e saúde garantidas."
+    href="/peixes"
+    emptyMessage="Nenhum peixe disponível de momento."
+  />
+);
 
 export default Peixes;

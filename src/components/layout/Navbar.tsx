@@ -90,18 +90,34 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="w-56 bg-popover">
                 {categoryLinks.map((link) => (
-                  <DropdownMenuItem key={link.href} asChild>
-                    <Link
-                      to={link.href}
-                      className={`w-full cursor-pointer ${
-                        location.pathname === link.href
-                          ? "bg-accent font-medium"
-                          : ""
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </DropdownMenuItem>
+                  <div key={link.href}>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to={link.href}
+                        className={`w-full cursor-pointer ${
+                          location.pathname === link.href
+                            ? "bg-accent font-medium"
+                            : ""
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </DropdownMenuItem>
+                    {link.children?.map((child) => (
+                      <DropdownMenuItem key={child.href} asChild>
+                        <Link
+                          to={child.href}
+                          className={`w-full cursor-pointer pl-7 text-muted-foreground ${
+                            location.pathname === child.href
+                              ? "bg-accent font-medium text-foreground"
+                              : ""
+                          }`}
+                        >
+                          {child.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -158,18 +174,33 @@ const Navbar = () => {
                 Início
               </Link>
               {categoryLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`px-4 py-3 rounded-lg font-body text-sm transition-smooth ${
-                    location.pathname === link.href
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                  }`}
-                >
-                  {link.label}
-                </Link>
+                <div key={link.href} className="flex flex-col gap-1">
+                  <Link
+                    to={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`px-4 py-3 rounded-lg font-body text-sm transition-smooth ${
+                      location.pathname === link.href
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                  {link.children?.map((child) => (
+                    <Link
+                      key={child.href}
+                      to={child.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`ml-4 px-4 py-2.5 rounded-lg font-body text-sm transition-smooth ${
+                        location.pathname === child.href
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                      }`}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
               ))}
             </div>
           </div>

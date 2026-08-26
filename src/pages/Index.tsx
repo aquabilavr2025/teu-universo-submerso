@@ -35,7 +35,7 @@ const Index = () => {
     { icon: Leaf, title: "Plantas", description: "Plantas aquáticas naturais", href: "/plantas", image: plantsImage },
     { icon: UtensilsCrossed, title: "Alimentação", description: "Flocos, pellets e congelados", href: "/alimentacao", image: foodImage },
     { icon: Droplets, title: "Condicionadores", description: "Tratamento e fertilizantes", href: "/condicionadores", image: conditionersImage },
-    { icon: Zap, title: "Equipamentos", description: "Iluminação e filtragem", href: "/equipamentos", image: equipmentImage },
+    { icon: Zap, title: "Iluminação", description: "Iluminação para o teu aquário", href: "/iluminacao", image: equipmentImage },
     { icon: Layers, title: "Substratos", description: "Férteis e inertes", href: "/substratos", image: substrateImage },
   ];
 
@@ -228,16 +228,16 @@ const Index = () => {
                 <p className="text-primary-foreground/80">Flocos, pellets e alimentos congelados</p>
               </div>
             </Link>
-            <Link to="/equipamentos" className="group relative h-72 rounded-3xl overflow-hidden shadow-card">
+            <Link to="/iluminacao" className="group relative h-72 rounded-3xl overflow-hidden shadow-card">
               {isImagesLoading ? (
                 <Skeleton className="w-full h-full" />
               ) : (
-                <img src={equipmentImage} alt="Equipamentos" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
+                <img src={equipmentImage} alt="Iluminação" className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-500" />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
               <div className="absolute bottom-8 left-8">
-                <h3 className="font-heading text-2xl font-semibold text-primary-foreground mb-2 tracking-tight">Equipamentos</h3>
-                <p className="text-primary-foreground/80">Iluminação LED e sistemas de filtragem</p>
+                <h3 className="font-heading text-2xl font-semibold text-primary-foreground mb-2 tracking-tight">Iluminação</h3>
+                <p className="text-primary-foreground/80">Iluminação LED para o teu aquário</p>
               </div>
             </Link>
           </div>

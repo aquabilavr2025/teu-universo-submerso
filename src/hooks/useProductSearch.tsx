@@ -58,39 +58,52 @@ const convertDriveLink = (driveLink: string): string => {
   return driveLink;
 };
 
-// Parse CSV
+// Parse CSV supporting quoted fields and multiline descriptions
 const parseCSV = (csv: string): string[][] => {
   const rows: string[][] = [];
-  const lines = csv.split(/\r?\n/);
-  
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    
-    const row: string[] = [];
-    let current = "";
-    let inQuotes = false;
-    
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      
-      if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') {
-          current += '"';
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (char === "," && !inQuotes) {
-        row.push(current);
-        current = "";
+  let row: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < csv.length; i++) {
+    const char = csv[i];
+    const nextChar = csv[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
       } else {
-        current += char;
+        inQuotes = !inQuotes;
       }
+    } else if (char === "," && !inQuotes) {
+      row.push(current);
+      current = "";
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && nextChar === "\n") {
+        i++;
+      }
+
+      row.push(current);
+
+      if (row.some(cell => cell.trim() !== "")) {
+        rows.push(row);
+      }
+
+      row = [];
+      current = "";
+    } else {
+      current += char;
     }
-    row.push(current);
+  }
+
+  // Add the last row
+  row.push(current);
+
+  if (row.some(cell => cell.trim() !== "")) {
     rows.push(row);
   }
-  
+
   return rows;
 };
 
@@ -166,7 +179,17 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
           category: category.label,
           categoryPath: category.path,
         };
-      }).filter(item => item.name && item.name.length > 0);
+      }).filter(item => {
+          const name = item.name.trim();
+            //Validação que checka se os nomes são apenas números ou símbolos
+          return (
+            name.length >= 2 &&
+            /[\p{L}\p{N}]/u.test(name) &&
+            !/^[\d\s€$.,;"']+$/.test(name) &&
+            Number.isFinite(item.priceValue) &&
+            item.priceValue >= 0
+          );
+        });
     } catch (error) {
       console.error(`Error fetching ${category.key}:`, error);
       return [];

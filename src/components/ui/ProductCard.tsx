@@ -91,31 +91,88 @@ const ProductCard = ({
       state={{ from: currentPage }}
       className="block h-full"
     >
-      <Card className="group h-full cursor-pointer overflow-hidden rounded-2xl border border-border/40 bg-card shadow-card transition-smooth hover:-translate-y-1 hover:shadow-glow">
-        <div className="aspect-[4/5] shrink-0 overflow-hidden bg-muted">
+      <Card
+        className="
+          group
+          flex h-full flex-col
+          overflow-hidden
+          rounded-2xl
+          border border-border/40
+          bg-card
+          shadow-card
+          transition-smooth
+          hover:-translate-y-1
+          hover:shadow-glow
+        "
+      >
+        {/* Product Image */}
+        <div
+          className="
+            relative
+            aspect-[4/3]
+            w-full
+            overflow-hidden
+            bg-gray-50
+            p-3
+            sm:p-4
+          "
+        >
           <img
             src={image}
             alt={name}
-            className="h-full w-full object-cover transition-smooth duration-500 group-hover:scale-105"
+            className="
+              h-full
+              w-full
+              object-contain
+              transition-transform
+              duration-300
+              group-hover:scale-[1.03]
+            "
             loading="lazy"
             onError={(event) => {
+              event.currentTarget.onerror = null;
               event.currentTarget.src = "/placeholder.svg";
             }}
           />
         </div>
 
-        <CardContent className="flex flex-1 flex-col gap-3 p-5">
+        {/* Product Information */}
+        <CardContent
+          className="
+            flex flex-1 flex-col
+            gap-3
+            p-4
+            sm:p-5
+          "
+        >
+          {/* Category and Stock */}
           {(category || stockLabel) && (
             <div className="flex flex-wrap items-center gap-2">
               {category && (
-                <span className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
+                <span
+                  className="
+                    inline-block
+                    rounded-full
+                    bg-secondary
+                    px-3 py-1
+                    text-xs
+                    font-medium
+                    text-secondary-foreground
+                  "
+                >
                   {category}
                 </span>
               )}
 
               {stockLabel && (
                 <span
-                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${stockClasses}`}
+                  className={`
+                    inline-flex items-center gap-1
+                    rounded-full
+                    px-3 py-1
+                    text-xs font-medium
+                    ${stockClasses}
+                  `}
                 >
                   <Package className="h-3 w-3" />
                   {stockLabel}
@@ -124,14 +181,36 @@ const ProductCard = ({
             </div>
           )}
 
-          <h3 className="line-clamp-2 font-heading text-lg font-semibold tracking-tight text-foreground">
+          {/* Product Name */}
+          <h3
+            className="
+              line-clamp-2
+              min-h-[2.75rem]
+              font-heading
+              text-base
+              sm:text-lg
+              font-semibold
+              tracking-tight
+              text-foreground
+            "
+          >
             {name}
           </h3>
 
+          {/* Flexible Space */}
           <div className="flex-1" />
 
+          {/* Price */}
           <div className="border-t border-border/30 pt-3">
-            <p className="font-body text-xl font-bold text-foreground">
+            <p
+              className="
+                font-body
+                text-lg
+                sm:text-xl
+                font-bold
+                text-foreground
+              "
+            >
               {price}
             </p>
           </div>

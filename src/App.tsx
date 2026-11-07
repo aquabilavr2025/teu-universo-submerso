@@ -129,7 +129,7 @@ const router = createBrowserRouter([
         element: <TroncosRochas />,
       },
       {
-        path: "produto",
+        path: ":category/:subcategory?/:id/:slug",
         element: <Produto />,
       },
       {

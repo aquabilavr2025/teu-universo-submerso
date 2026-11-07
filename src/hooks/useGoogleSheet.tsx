@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { getProductId, getProductRouteId } from "@/lib/productRoute";
 
 export interface ProductItem {
+  id: string;
+  routeId: string;
   image: string;
   name: string;
   price: string;
@@ -142,7 +145,7 @@ const formatPrice = (price: string): string => {
 };
 
 // Detect if the first row looks like a header row
-const isHeaderRow = (row: string[]): boolean => {
+export const isHeaderRow = (row: string[]): boolean => {
   const headerKeywords = [
     "imagem", "image", "foto", "photo", "link",
     "nome", "name", "produto", "product",
@@ -186,12 +189,14 @@ const fetchSheetData = async (tabName: string): Promise<ProductItem[]> => {
   // Smart header detection: only skip first row if it looks like a header
   const dataRows = rows.length > 0 && isHeaderRow(rows[0]) ? rows.slice(1) : rows;
   
-  const items: ProductItem[] = dataRows.map((row) => {
+  const items: ProductItem[] = dataRows.map((row, index) => {
     const [imageLink, name, priceStr, description, stockStr] = row;
     
     const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
     
     return {
+      id: getProductId(sheetName, index),
+      routeId: getProductRouteId(index),
       image: convertDriveLink(imageLink?.trim() || ""),
       name: sanitizeText(name?.trim() || ""),
       price: formatPrice(priceStr?.trim() || "0"),

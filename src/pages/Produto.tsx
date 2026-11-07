@@ -1,8 +1,5 @@
-import {
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,55 +13,78 @@ import { ShoppingCart, Package, ArrowLeft } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { parseDescriptionBullets } from "@/lib/utils";
-
-const parsePriceToNumber = (price: string): number => {
-  const cleanPrice = price.replace("€", "").replace(",", ".").trim();
-  return parseFloat(cleanPrice) || 0;
-};
-
-const generateId = (name: string): string => {
-  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-};
+import { useAllProducts } from "@/hooks/useProductSearch";
+import {
+  getProductCategory,
+  getProductPath,
+  getProductSlug,
+} from "@/lib/productRoute";
 
 const Produto = () => {
-  const [searchParams] = useSearchParams();
+  const { category, subcategory, id, slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { addItem } = useCart();
+  const { data: products = [], isLoading, isError } = useAllProducts();
+  const routeCategory = [category, subcategory].filter(Boolean).join("/");
+  const categoryProducts = products.filter(
+    (item) => getProductCategory(item.categoryPath) === routeCategory,
+  );
+  const product =
+    categoryProducts.find((item) => item.routeId === id) ??
+    categoryProducts.find((item) => getProductSlug(item.name) === slug);
 
+  useEffect(() => {
+    if (!product) return;
 
-  const name = searchParams.get("nome") || "";
-  const price = searchParams.get("preco") || "";
-  const image = searchParams.get("imagem") || "";
-  const description = searchParams.get("descricao") || "";
-  const stockStr = searchParams.get("stock");
-  const stock = stockStr !== null ? parseInt(stockStr, 10) : null;
-  const category = searchParams.get("categoria") || "";
-  const backPath = searchParams.get("origem") || "/";
+    const canonicalPath = getProductPath(
+      product.categoryPath,
+      product.routeId,
+      product.name,
+    );
+    if (location.pathname !== canonicalPath) {
+      navigate(canonicalPath, { replace: true, state: location.state });
+    }
+  }, [location.pathname, location.state, navigate, product]);
 
   const handleBack = () => {
+    const from = (location.state as { from?: unknown } | null)?.from;
+    if (typeof from === "string" && from.startsWith("/") && !from.startsWith("//")) {
+      navigate(from);
+      return;
+    }
+
     if (location.key !== "default") {
       navigate(-1);
       return;
     }
 
-    navigate(backPath, {
-      replace: true,
-    });
+    navigate("/", { replace: true });
   };
 
   const handleAddToCart = () => {
+    if (!product) return;
     addItem({
-      id: generateId(name),
-      name,
-      price,
-      priceValue: parsePriceToNumber(price),
-      image,
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      priceValue: product.priceValue,
+      image: product.image,
     });
-    toast.success(`${name} adicionado ao carrinho!`, { duration: 2000 });
+    toast.success(`${product.name} adicionado ao carrinho!`, { duration: 2000 });
   };
 
-  if (!name) {
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-24 text-center">
+          <p className="text-muted-foreground">A carregar produto...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (isError || !product) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-24 text-center">
@@ -99,8 +119,8 @@ const Produto = () => {
           <div className="w-full max-w-[520px] mx-auto overflow-hidden rounded-3xl bg-muted shadow-card">
             <div className="aspect-[4/5]">
               <img
-                src={image || "/placeholder.svg"}
-                alt={name}
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -112,28 +132,28 @@ const Produto = () => {
           {/* Detalhes */}
           <div className="space-y-6">
             <div className="flex items-center gap-2 flex-wrap">
-              {category && <Badge variant="secondary">{category}</Badge>}
+              <Badge variant="secondary">{product.category}</Badge>
 
-              {stock !== null && !isNaN(stock) && (
+              {product.stock !== null && !isNaN(product.stock) && (
                 <Badge
-                  variant={stock === 1 ? "default" : "secondary"}
+                  variant={product.stock === 1 ? "default" : "secondary"}
                   className={
-                    stock === 1
+                    product.stock === 1
                       ? "bg-green-600 hover:bg-green-700"
                       : "bg-amber-500 hover:bg-amber-600 text-white"
                   }
                 >
                   <Package className="w-3 h-3 mr-1" />
-                  {stock === 1 ? "Em Stock" : "Sob Encomenda"}
+                  {product.stock === 1 ? "Em Stock" : "Sob Encomenda"}
                 </Badge>
               )}
             </div>
 
             <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground tracking-tight leading-tight">
-              {name}
+              {product.name}
             </h1>
 
-            <p className="text-4xl md:text-5xl font-bold text-primary">{price}</p>
+            <p className="text-4xl md:text-5xl font-bold text-primary">{product.price}</p>
 
             <Button
               onClick={handleAddToCart}
@@ -149,9 +169,9 @@ const Produto = () => {
                   Descrição
                 </AccordionTrigger>
                 <AccordionContent>
-                  {description ? (
+                  {product.description ? (
                     <div className="space-y-2">
-                      {parseDescriptionBullets(description).map((text, idx) => (
+                      {parseDescriptionBullets(product.description).map((text, idx) => (
                         <p key={idx} className="text-foreground leading-relaxed">
                           {text}
                         </p>

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { ProductItem } from "./useGoogleSheet";
+import { isHeaderRow, type ProductItem } from "./useGoogleSheet";
+import { getProductId, getProductRouteId } from "@/lib/productRoute";
 
 const SHEET_ID = "1hyIToXk4yncsHUfQdokrKWk1QYdWwTvIVwfegJVA1xU";
 
@@ -58,39 +59,52 @@ const convertDriveLink = (driveLink: string): string => {
   return driveLink;
 };
 
-// Parse CSV
+// Parse CSV supporting quoted fields and multiline descriptions
 const parseCSV = (csv: string): string[][] => {
   const rows: string[][] = [];
-  const lines = csv.split(/\r?\n/);
-  
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    
-    const row: string[] = [];
-    let current = "";
-    let inQuotes = false;
-    
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      
-      if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') {
-          current += '"';
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (char === "," && !inQuotes) {
-        row.push(current);
-        current = "";
+  let row: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < csv.length; i++) {
+    const char = csv[i];
+    const nextChar = csv[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
       } else {
-        current += char;
+        inQuotes = !inQuotes;
       }
+    } else if (char === "," && !inQuotes) {
+      row.push(current);
+      current = "";
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && nextChar === "\n") {
+        i++;
+      }
+
+      row.push(current);
+
+      if (row.some(cell => cell.trim() !== "")) {
+        rows.push(row);
+      }
+
+      row = [];
+      current = "";
+    } else {
+      current += char;
     }
-    row.push(current);
+  }
+
+  // Add the last row
+  row.push(current);
+
+  if (row.some(cell => cell.trim() !== "")) {
     rows.push(row);
   }
-  
+
   return rows;
 };
 
@@ -105,11 +119,48 @@ const sanitizeText = (text: string): string => {
     .trim();
 };
 
+// Sanitize product descriptions while preserving line breaks
+const sanitizeDescription = (text: string): string => {
+  if (!text) return "";
+
+  return text
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]*/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+};
+
 // Extract numeric price value
 const extractPriceValue = (price: string): number => {
-  const cleanPrice = price.replace(/[€$,\s]/g, "").replace(",", ".");
-  const value = parseFloat(cleanPrice);
-  return isNaN(value) ? 0 : value;
+  if (!price) return 0;
+
+  let cleanPrice = price
+    .replace(/[€$\s]/g, "")
+    .trim();
+
+  // Handle European and international price formats
+  if (cleanPrice.includes(",") && cleanPrice.includes(".")) {
+    if (cleanPrice.lastIndexOf(",") > cleanPrice.lastIndexOf(".")) {
+      // European format: 1.250,50
+      cleanPrice = cleanPrice.replace(/\./g, "").replace(",", ".");
+    } else {
+      // International format: 1,250.50
+      cleanPrice = cleanPrice.replace(/,/g, "");
+    }
+  } else if (cleanPrice.includes(",")) {
+    // Portuguese format: 22,50
+    cleanPrice = cleanPrice.replace(",", ".");
+  }
+
+  const value = Number(cleanPrice);
+
+  return Number.isFinite(value) ? value : 0;
 };
 
 const formatPrice = (price: string): string => {
@@ -143,11 +194,7 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
       const rows = parseCSV(csvText);
       
       // Smart header detection: only skip first row if it looks like a header
-      const headerKeywords = ["imagem", "image", "foto", "nome", "name", "preço", "preco", "price", "produto", "product"];
-      const hasHeader = rows.length > 0 && rows[0].some(cell => {
-        const lower = cell.trim().toLowerCase();
-        return headerKeywords.some(kw => lower === kw || lower.includes(kw));
-      });
+      const hasHeader = rows.length > 0 && isHeaderRow(rows[0]);
       const dataRows = hasHeader ? rows.slice(1) : rows;
       
       return dataRows.map((row, index) => {
@@ -156,17 +203,28 @@ const fetchAllProducts = async (): Promise<SearchableProduct[]> => {
         const stockVal = stockStr?.trim() ? parseInt(stockStr.trim(), 10) : null;
         
         return {
-          id: `${category.key}-${index}`,
+          id: getProductId(category.key, index),
+          routeId: getProductRouteId(index),
           image: convertDriveLink(imageLink?.trim() || ""),
           name: sanitizeText(name?.trim() || ""),
           price: formattedPrice,
           priceValue: extractPriceValue(formattedPrice),
-          description: sanitizeText(description?.trim() || ""),
+          description: sanitizeDescription(description?.trim() || ""),
           stock: isNaN(stockVal as number) ? null : stockVal,
           category: category.label,
           categoryPath: category.path,
         };
-      }).filter(item => item.name && item.name.length > 0);
+      }).filter(item => {
+          const name = item.name.trim();
+            //Validação que checka se os nomes são apenas números ou símbolos
+          return (
+            name.length >= 2 &&
+            /[\p{L}\p{N}]/u.test(name) &&
+            !/^[\d\s€$.,;"']+$/.test(name) &&
+            Number.isFinite(item.priceValue) &&
+            item.priceValue >= 0
+          );
+        });
     } catch (error) {
       console.error(`Error fetching ${category.key}:`, error);
       return [];

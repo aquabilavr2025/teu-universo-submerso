@@ -27,10 +27,6 @@ const parsePriceToNumber = (price: string): number => {
   return parseFloat(cleanPrice) || 0;
 };
 
-const generateId = (name: string): string => {
-  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-};
-
 const ProductDetailModal = ({
   product,
   open,
@@ -44,7 +40,7 @@ const ProductDetailModal = ({
 
   const handleAddToCart = () => {
     cart.addItem({
-      id: generateId(product.name),
+      id: product.id,
       name: product.name,
       price: product.price,
       priceValue: parsePriceToNumber(product.price),

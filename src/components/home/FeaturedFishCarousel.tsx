@@ -77,6 +77,7 @@ const FeaturedFishCarousel = ({ fish, isLoading }: FeaturedFishCarouselProps) =>
           >
             <div className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <ProductCard
+                routeId={fish.routeId}
                 image={fish.image}
                 name={fish.name}
                 price={fish.price}

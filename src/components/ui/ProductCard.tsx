@@ -1,8 +1,10 @@
 import { Package } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, useLocation } from "react-router-dom";
+import { getProductPath } from "@/lib/productRoute";
 
 interface ProductCardProps {
+  routeId: string;
   image: string;
   name: string;
   price: string;
@@ -16,6 +18,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({
+  routeId,
   image,
   name,
   price,
@@ -26,35 +29,6 @@ const ProductCard = ({
   href,
 }: ProductCardProps) => {
   const location = useLocation();
-
-  const buildProductUrl = () => {
-    const params = new URLSearchParams();
-
-    params.set("nome", name);
-    params.set("preco", price);
-
-    if (image) {
-      params.set("imagem", image);
-    }
-
-    if (description) {
-      params.set("descricao", description);
-    }
-
-    if (stock !== null && stock !== undefined) {
-      params.set("stock", String(stock));
-    }
-
-    if (category) {
-      params.set("categoria", category);
-    }
-
-    if (href) {
-      params.set("origem", href);
-    }
-
-    return `/produto?${params.toString()}`;
-  };
 
   const displayStock = stock ?? quantity;
 
@@ -87,7 +61,7 @@ const ProductCard = ({
 
   return (
     <Link
-      to={buildProductUrl()}
+      to={getProductPath(href ?? "/peixes", routeId, name)}
       state={{ from: currentPage }}
       className="block h-full"
     >

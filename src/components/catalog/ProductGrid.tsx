@@ -70,6 +70,7 @@ const ProductGrid = ({
             style={{ animationDelay: `${index * 0.05}s` }}
           >
             <ProductCard
+              routeId={item.routeId}
               image={item.image}
               name={item.name}
               price={item.price}
